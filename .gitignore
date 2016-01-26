@@ -1,0 +1,7 @@
+.vagrant
+*.zip
+*.pyc
+*.DS_Store
+*.swp
+local_settings.py
+*~
