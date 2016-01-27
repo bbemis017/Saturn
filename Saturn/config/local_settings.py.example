@@ -1,0 +1,12 @@
+DEBUG = True
+TEMPLATE_DEBUG = True
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'saturn',
+        'USER': 'saturn',
+        'PASSWORD': 'Re4LlyH4RdT0Gue5SpaSsw0rd',
+        'HOST': '127.0.0.1',
+        'PORT': 3306,
+    }
+}
