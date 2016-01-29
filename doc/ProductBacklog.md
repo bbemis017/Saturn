@@ -1,0 +1,93 @@
+## Product Backlog
+
+*Ben Bemis, Siyang Chen, Yingtong Chen, Yuhao Lu, Liang Zhang, Yuhong Zha*
+
+
+### Problem Statement:
+
+Most professors and job-seekers today are posting their information online to attract attention and store information. However, Building the website can be difficult for those who have not been professionally trained. Our website builder enables those who are untrained and are looking to build beautiful websites in a considerably short time by providing them with a well-designed framework that can customize, host, and output website files for our users.
+
+
+
+### Background Information
+
+#### Marketing
+
+We did a little research about professor homepages that are made by our professors from the CS department. As we researched, there are 104 faculty members listed in the Purdue CS Faculty page. Seventy-Nine of them (76%) have their own home page, so we created a simple web crawler to take a deeper look at these web pages, and we found that:
+
+* 41 of them (52%), had used div in their homepage
+  
+* 42 of them (53%), had used css in their homepage
+  
+* 31 of them (39%), had used div + css in their homepage
+  
+* 5 of them (6.3%), had used bootstrap in their homepage
+  
+
+From these statistics, we observed more than half of professors homepages do not have a good-looking web page in the CS department. This implies that other departments will have an even lower chance to have a decent course web page. So the market for our product should be fairly wide within the range of universities.
+
+
+#### Similar Product
+
+There are many website builders already out there like wix, webs, and wordpress. All of these services force users to host pages on the server they built them on. But what if the user already has their hosting service and they are not able to take their new web page and host it on their service. We will allow users to take their webpage and host on their own server. Our web-page generator will also be easier to use because users will not be required to configure databases or HTTP Servers themselves.  
+
+
+
+### Requirements
+
+
+
+#### Functional Requirements
+
+
+
+* As a user, I would like to create an account to manage web pages.
+* As a user, I would like to login to my account conveniently.
+* As a developer, I would like users to have the option of changing their password.
+* As a user, I would like to access the builder by using major browsers across multiple platforms.
+* As a job-seeker, I would like to create professional and attractive resumes conveniently. 
+* As a university professor, I would like to create a simple but gorgeous webpage with ease. 
+* As a user, I want to choose a template to build my site off of.
+* As a user, I would like to transfer the web page I’ve created to another hosting service. 
+* As a user, I would like to use my own domain to access the website.
+* As a user, I would like to publish my work to the public right after I finish building the page without transferring the HTML file to somewhere else.
+* As a user, I would like to customize my web page design.
+* As a user, I would like to fill out a form and generate a web page that follows a strict template.
+* As a user, I would like to be able to drag and drop the widgets that I need to the desired place.
+* As a user, I would like to drag local files that I need onto the website.
+* As a user, I would like save my unfinished web page.
+* As a developer, I would like the user to store their unfinished webpage safely.
+* As a user, I would like to access my new website on mobile devices like tablets and cell phones.
+
+
+
+
+
+
+
+
+
+
+
+ 
+#### Non-functional Requirements:
+
+
+##### Infrastructure
+
+The application should follow the MVC framework. Our application pays more attention to the front-end due to the user’s requirements on various web page templates. MVC will be very advantageous because it keeps the project more modular and once one aspect is finished we will not have to look at too many of the details.  
+
+To achieve a MVC framework, we would like to use Django for backend developing, whose designer-friendly template development process could save us a significant amount of time. On the other side, we would use Bootstrap and jQuery to design modern and decent frontend web pages. And finally we would choose MySQL as our database because it’s open source and it has sufficient documentation. 
+
+
+
+##### Performance and Security
+
+Django is a open source web framework written in Python, which is secure enough that we could prevent modern web attacks like SQL Injection. The only security problem we need to worry about would be our upload function and weak passwords. We can eliminate them by restricting the upload directory’s execution permission and require our staff to use strong passwords on the website. 
+
+
+
+##### Hosting and development
+
+We choose AWS to host our applications so it will be easy for all the members to access. Also for the users who want us to help them host their page, we can easily assign them some space and secondary domain. And we can write auto-deploy scripts using Github API to ease our deploy process. In the development part, we would have a code review system powered by Phabricator, which would allow teammates to review each other’s code and make our system have a less chance to go down due to coding bugs. We would use Asana as well to track project progress.
+
