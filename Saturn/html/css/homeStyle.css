@@ -1,0 +1,112 @@
+body{
+    background-color: #1e2b4a;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    color: aliceblue;
+    text-shadow: 3px 0 0 #000;
+}
+.box{
+    max-width: 400px;
+    margin: 50px auto 0;
+}
+.negative-top{
+    /*positions element 10px higher on screen*/
+    position: relative;
+    
+}
+.positive-top{
+    position: relative;
+    top: 70px;
+}
+
+hr{
+    border-width: 6px;
+    max-width: 300px;
+    border-radius: 3px;
+}
+
+hr.dark {
+    border-color: #191d21;
+}
+
+.overlay2{
+    position: relative;
+    top: -170px;
+    text-shadow: 2px;
+    text-align: center;
+}
+.font-title{
+    font-family: "sherwood";
+    font-style: italic;
+    font-size: 26px;
+    color:
+    
+}
+.font-lg{
+    font-size: 36px;
+}
+
+.font-cornerstone{
+    font-family: "Cornerstone";
+    font-size: 30px;
+  
+}
+.font-standard{
+    font-family: "Times";
+    font-size: 16px;
+}
+.navbar-btn{
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #191d21;
+    color:aliceblue;
+}
+header{
+    position: relative;
+    min-height: auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    background-position: center;
+    background-image: url(../images/saturn.png);
+    background-repeat: repeat;
+    color: aliceblue;
+    
+}
+.header-content{
+    display: inline-block;
+    min-height: auto;
+    padding: 0px 15px 400px 15px;
+    width: 96%;
+}
+.header-content-inner{
+    text-align: right;
+}
+
+.btn-primary{
+    border-radius: 15px;
+}
+
+.section2{
+    background-color: rgba(25, 64, 227, 0.6);
+    border: 0 none;
+    
+}
+.section3{
+    background-color: #1e2b4a;
+    border: 0 none;
+}
+.footer{
+    height: 100px;
+}
+
+span.glyphicon{
+  font-size: 60px;
+  color: bisque;
+}
