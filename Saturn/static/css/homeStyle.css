@@ -74,7 +74,7 @@ header{
     background-size: cover;
     -o-background-size: cover;
     background-position: center;
-    background-image: url(../images/saturn.png);
+    background-image: url(../static/images/saturn.png);
     background-repeat: repeat;
     color: aliceblue;
     
