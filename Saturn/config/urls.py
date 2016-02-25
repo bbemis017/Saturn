@@ -21,6 +21,8 @@ from config import views
 extra_pattern = [
     url(r'^$', views.home),
     url(r'^reset_password$', views.reset_password),
+    url(r'^login$', views.login_page),
+    url(r'^signup$', views.signup_page),
 ]
 
 urlpatterns = [

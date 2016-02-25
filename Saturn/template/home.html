@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <!--custom css  always import after bootstrap style-->
+    <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/homeStyle.css" %}">
 
     <title>Site Generator</title>
@@ -17,13 +18,13 @@
 
   <body id="top">
 
-    <!-- Navigation Bar --->
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         
         <!--Displayed when navigation bar is sized down-->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse">
             <span class="sr-only"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -33,12 +34,12 @@
         </div>
         
         <!--Displayed when Window is decently sized -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse">
           <ul class="nav navbar-nav navbar-right text-center">
             <li>
-              <a href="">Log In</a>
+              <a href="/login">Log In</a>
               </li>
-            <li><a href="">Sign Up</a>
+              <li><a href="/signup">Sign Up</a>
             </li>
           </ul>
         </div> <!-- end of nav bar collapse -->
@@ -86,7 +87,7 @@
             <hr class="dark">
             <p class="text-faded font-standard">Start building your course webpage or online portfolio with our intuitive website builder. Our pre-built templates give you the ability to just choose what you want your site to look like and focus on what is really important, the content. Already have a hosting service? Don't worry you can still use our site building tools and download all the necessary web files so that you can transfer your site to a new host.</p>
             <br>
-            <a href="#top" class="btn btn-primary btn-lg page-scroll section3">Get Started</a>
+            <a href="/signup" class="btn btn-primary btn-lg page-scroll section3">Get Started</a>
           </div>
           <br><br><br>
         </div>

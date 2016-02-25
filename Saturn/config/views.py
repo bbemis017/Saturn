@@ -15,3 +15,9 @@ def reset_password(request):
 
         context = Context({'enterpassword':enterpassword, 'enterconfirmation':enterconfirmation})
         return render(request, 'reset_password.html', context)
+
+def login_page(request):
+    return render(request,'login.html')
+
+def signup_page(request):
+    return render(request,'Signup.html')
