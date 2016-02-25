@@ -20,6 +20,7 @@ from config import views
 
 extra_pattern = [
     url(r'^$', views.home),
+    url(r'^reset_password$', views.reset_password),
 ]
 
 urlpatterns = [
