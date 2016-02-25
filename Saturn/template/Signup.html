@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="../static/css/reset_password.css">
+<title>Sign Up</title>
+</head>
+
+<body>
+      <!-- Navigation Bar --->
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        
+        <!--Displayed when navigation bar is sized down-->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand page-scroll font-title" href="">Saturn Site Generator</a>
+        </div>
+        
+        <!--Displayed when Window is decently sized -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right text-center">
+            <li>
+          	  <a href="">Home</a>
+            </li>
+          </ul>
+        </div> <!-- end of nav bar collapse -->
+        
+      </div> <!-- end of container fluid -->
+      
+    </nav>      
+
+	<div class="container header" style="margin-bottom: 25px;">
+        <h1>Create an Account</h1>
+	</div>
+
+	<div class="password_form">
+		<form class="form-group">
+			<div class="form-group">
+        		<label for=“Email”>Email address</label>
+        		<input type="email" class="form-control" id=“Email” placeholder="Email">
+      		</div>
+		
+		<form>
+			<form class="form-group">
+			<div class="form-group">
+        		<label for=“username”>Username</label>
+        		<input type=“text” class="form-control" id=“username” placeholder=Username>
+     	 	</div>
+
+		<form>
+			<div class="form-group" style="margin-top: 15px;">
+    	    		<label for=“Password”>Password</label>
+     		   	<input type="password" class="form-control" id=“Password” placeholder="Password">
+     	 	</div>
+     	 	
+		<div class="form-group">
+      		  	<label for=“resetP”>Retype Password</label>
+      		  	<input type="password" class="form-control" id=“resetP” placeholder="Password">
+      		</div>
+
+		<div class="dropdown">
+  			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    			Choose your profession
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    			<li><a href="#">Professor</a></li>
+    			<li><a href="#">Student</a></li>
+			</ul>
+		</div>
+		</form>
+      		<button type="button" class="btn btn-secondary btn-block">Sign Up</button>
+		</form>
+
+		<div class=“row”>
+		        <class="col-md-6 col-md-offset-3">Already have an account?
+			<button type="button" class="btn btn-link">Sign In!</button>
+		</div>
+	</div>
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+</body>
+
+</html>
