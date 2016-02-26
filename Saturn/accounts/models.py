@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth import authenticate
 
 
 import hashlib
@@ -28,3 +29,13 @@ class Accounts(models.Model):
         self.expire_at = timezone.now() + timedelta(hours=24)
         if commit:
             self.save()
+
+    #Password verification funciton
+    def authetication(self, usr, pwd) :
+    	user=authenticate(username = usr, password = pwd)
+    	if user is not None:
+    		#return success message
+    		return "log in success!"
+    	else:
+    		#return error message
+    		return "log in failure!"
