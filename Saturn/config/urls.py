@@ -21,11 +21,10 @@ from config import views
 extra_pattern = [
     url(r'^$', views.home),
     url(r'^reset_password$', views.reset_password),
-    url(r'^login$', views.login_page),
-    url(r'^signup$', views.signup_page),
 ]
 
 urlpatterns = [
 	url(r'^', include(extra_pattern)),
+    url(r'^accounts/', include('accounts.urls')),
     url(r'^admin/', admin.site.urls),
 ]

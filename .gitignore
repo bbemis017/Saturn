@@ -4,5 +4,6 @@
 *.DS_Store
 *.swp
 db.sqlite3
+migrations/
 local_settings.py
 *~

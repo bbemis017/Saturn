@@ -1,0 +1,87 @@
+{% load staticfiles %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "css/reset_password.css" %}">
+<title>Sign Up</title>
+</head>
+
+<body>
+      <!-- Navigation Bar --->
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        
+        <!--Displayed when navigation bar is sized down-->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand page-scroll font-title" href="">Saturn Site Generator</a>
+        </div>
+        
+        <!--Displayed when Window is decently sized -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right text-center">
+            <li>
+          	  <a href="">Home</a>
+            </li>
+          </ul>
+        </div> <!-- end of nav bar collapse -->
+        
+      </div> <!-- end of container fluid -->
+      
+    </nav>      
+
+	<div class="container header text-center" style="margin-bottom: 25px;">
+        <h1>Create an Account</h1>
+	</div>
+
+	<div class="password_form">
+		<form class="form-group" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+              <label class="control-label">Email</label>
+              <input id="id_email" name="email" type="email" placeholder="Email address" class="form-control">
+              {% if signup_form.email.errors %}
+                <ul class="errorlist"><li>
+                    User with this Email already exists.
+                </li></ul>
+              {% endif %}
+            </div>  
+            <div class="form-group">
+              <label class="control-label">Username</label>
+              <input id="id_username" name="username" type="text" placeholder="Username" class="form-control">
+              {% if signup_form.username.errors %}
+                <ul class="errorlist"><li>
+                    User with this Username already exists.
+                </li></ul>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label class="control-label">Password</label>
+              <input id="id_password" name="password" type="password" placeholder="Password" class="form-control">
+              {% if signup_form.password.errors %}
+                <ul class="errorlist"><li>
+                    User with this Username already exists.
+                </li></ul>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-info btn-block">Signup for Saturn</button>
+		</form>
+
+		<div class=“row”>
+		        <class="col-md-6 col-md-offset-3">Already have an account?
+			<button type="button" class="btn btn-link">Sign In!</button>
+		</div>
+	</div>
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+</body>
+
+</html>
