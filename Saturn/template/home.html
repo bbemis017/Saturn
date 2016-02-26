@@ -5,7 +5,7 @@
   <head>
 
     <!--bootstrap style-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static "bootstrap-3.3.6/css/bootstrap.min.css" %}">
 
     <!--custom css  always import after bootstrap style-->
     <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
@@ -37,9 +37,9 @@
         <div class="collapse navbar-collapse" id="bs-navbar-collapse">
           <ul class="nav navbar-nav navbar-right text-center">
             <li>
-              <a href="/login">Log In</a>
+              <a href="/accounts/signin">Log In</a>
               </li>
-            <li><a href="accounts/signup/">Sign Up</a>
+            <li><a href="/accounts/signup/">Sign Up</a>
             </li>
           </ul>
         </div> <!-- end of nav bar collapse -->
@@ -84,10 +84,10 @@
           <br><br><br>
           <div class="text-center">
             <h2 class="font-cornerstone">Everything You need!</h2>
-            <hr class="dark">
+            <hr class="light">
             <p class="text-faded font-standard">Start building your course webpage or online portfolio with our intuitive website builder. Our pre-built templates give you the ability to just choose what you want your site to look like and focus on what is really important, the content. Already have a hosting service? Don't worry you can still use our site building tools and download all the necessary web files so that you can transfer your site to a new host.</p>
             <br>
-            <a href="/signup" class="btn btn-primary btn-lg page-scroll section3">Get Started</a>
+            <a href="/accounts/signup" class="btn btn-primary btn-lg page-scroll section3">Get Started</a>
           </div>
           <br><br><br>
         </div>
@@ -101,7 +101,7 @@
         <div class="row">
           <br><br><br>
           <h2 class="text-center font-cornerstone">Services</h2>
-          <hr class="dark">
+          <hr class="light">
         </div>
       </div>
         
@@ -160,10 +160,10 @@
 
 
 
-    <!--cdn for JQuery-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
-    <!--cdn for bootstrap javascript-->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!--local copy of JQuery-->
+    <script src="{% static "js/jquery.js" %}"></script>
+    <!--local copy of bootstrap javascript-->
+    <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
     
       
   </body>

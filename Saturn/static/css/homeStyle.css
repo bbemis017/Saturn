@@ -28,10 +28,15 @@ hr{
     border-width: 6px;
     max-width: 300px;
     border-radius: 3px;
+    outline-style: solid;
+
 }
 
-hr.dark {
-    border-color: #191d21;
+hr.light{
+    border-color: aliceblue;
+    outline-style: solid;
+    outline-color: #000;
+    outline-width: 1px;
 }
 
 .overlay2{
@@ -40,12 +45,7 @@ hr.dark {
     text-shadow: 2px;
     text-align: center;
 }
-.navbar-btn{
-    margin-left: 10px;
-    margin-right: 10px;
-    background-color: #191d21;
-    color:aliceblue;
-}
+
 header{
     position: relative;
     min-height: auto;

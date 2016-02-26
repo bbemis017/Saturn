@@ -1,3 +1,4 @@
+from django.template import Template, Context
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -39,3 +40,14 @@ def signup(request):
         return HttpResponseRedirect(next) 
 
     return render(request, "accounts/signup.html", locals())
+
+def signin(request):
+    return render(request, "accounts/login.html",locals())
+
+def reset_password(request):
+        #Set true if user needs to enter confirmation code
+        enterconfirmation = False
+        #Set true if user needs to enter new password
+        enterpassword = False
+
+        return render(request, 'accounts/reset_password.html',locals())

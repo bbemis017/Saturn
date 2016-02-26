@@ -14,3 +14,9 @@
   font-family: "Times";
   font-size: 16px;
 }
+.navbar-btn{
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #191d21;
+    color:aliceblue;
+}
