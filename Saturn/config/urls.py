@@ -24,7 +24,8 @@ extra_pattern = [
 ]
 
 urlpatterns = [
-	url(r'^', include(extra_pattern)),
+    url(r'^', include(extra_pattern)),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'website/',include('website.urls')),
 ]
