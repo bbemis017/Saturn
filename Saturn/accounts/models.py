@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import authenticate
@@ -14,11 +15,14 @@ ALLOWED_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ23456789'
 class Accounts(models.Model):
     user = models.ForeignKey(User)
     verified = models.BooleanField(default=False)
+    verification_code = models.CharField('verification_code',
+                                         max_length=255, blank=True, null=True)
+    expire_at = models.DateTimeField('Effective time', blank=True, null=True)
 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    bday = models.DateField(max_length=30)
-    job = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    bday = models.DateField(max_length=30, blank=True, null=True)
+    job = models.CharField(max_length=30, blank=True, null=True)
 
 
     def __unicode__(self):
@@ -30,12 +34,4 @@ class Accounts(models.Model):
         if commit:
             self.save()
 
-    #Password verification funciton
-    def authetication(self, usr, pwd) :
-    	user=authenticate(username = usr, password = pwd)
-    	if user is not None:
-    		#return success message
-    		return "log in success!"
-    	else:
-    		#return error message
-    		return "log in failure!"
+User.account = property(lambda u: Accounts.objects.get_or_create(user=u)[0])

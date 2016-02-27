@@ -4,5 +4,7 @@ from accounts import views
 urlpatterns = [
 	url(r'^signup/$', views.signup),
 	url(r'^signin/$', views.signin),
-        url(r'^reset_password/$', views.reset_password),
+	url(r'^activate/$', views.activate),
+	url(r'^verification/$', views.send_verification_email),
+    url(r'^reset_password/$', views.reset_password),
 ]
