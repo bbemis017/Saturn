@@ -111,3 +111,9 @@ def reset_password(request):
     enterpassword = False
 
     return render(request, 'accounts/reset_password.html',locals())
+
+def dashboard(request):
+    return render(request, "accounts/dashboard.html", locals())
+
+def sites(request):
+    return render(request, "accounts/sites.html", locals())
