@@ -112,6 +112,28 @@ def reset_password(request):
 
     return render(request, 'accounts/reset_password.html',locals())
 
+@login_required
+def profile(request):
+    if request.user.is_authenticated():
+        #the user has logged in
+        account = Accounts.objects.get(user=request.user)
+        if request.method != "POST":
+            editProfile_form = EditUserProfileForm(instance=account)
+            return render(request, "accounts/account_management.html", locals())
+
+        editProfile_form = EditUserProfileForm(request.POST)
+            
+        if editProfile_form.is_valid():
+            #save information 
+            form.save();
+            update_success = True;
+            return render(request, "accounts/account_management.html",locals())
+
+        return render(request, "accounts/edit_user_profile.html", locals())    
+    # the user hasn't logged in yet
+    return render(request, "accounts/signin.html", locals())
+
+
 def dashboard(request):
     return render(request, "accounts/dashboard.html", locals())
 

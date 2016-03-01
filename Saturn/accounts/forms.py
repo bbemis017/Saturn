@@ -24,3 +24,9 @@ class ResetPasswordForm(forms.Form):
     password = forms.CharField(label="Password", max_length=255, widget = forms.PasswordInput)
     confirm_password = forms.CharField(label="Confirm Password", max_length=255, widget = forms.PasswordInput)
     verification_code = forms.CharField(label="verification_code", max_length=255)
+
+class EditUserProfileForm(forms.Form):
+    first_name = forms.CharField(label="First Name", max_length=255)
+    last_name = forms.CharField(label="Last Name", max_length=255)
+    birthday = forms.CharField(label="Birthday", max_length=255)
+    job = forms.CharField(label="Job", max_length=255)
