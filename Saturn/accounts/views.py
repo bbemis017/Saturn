@@ -102,7 +102,31 @@ def signup(request):
     return render(request, "accounts/signup.html", locals())
 
 def signin(request):
-    return render(request, "accounts/login.html",locals())
+    if request.method != "POST":
+        signin_form = SigninForm()
+        return render(request, "accounts/signin.html", locals())
+
+    signin_form = SigninForm(request.POST)
+
+    if signin_form.is_valid():
+        username = signin_form.cleaned_data['username']
+        password = signin_form.cleaned_data['password']
+        key = 'email__iexact' if '@' in username else 'username__iexact'
+        if User.objects.filter(**{key: username}).exists():
+            user = User.objects.get(**{key: username})
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                django_login(request, user)
+                next = request.GET.get('next', '')
+                if next == '':
+                    next = '/'
+                return HttpResponseRedirect(next)
+            else:
+                error = signin_form._errors.setdefault("Unable to log in!", ErrorList())
+                return render(request, "accounts/signin.html", locals())
+    else:
+        login_err = True
+        return render(request, "accounts/Signin.html",locals())
 
 def reset_password(request):
     #Set true if user needs to enter confirmation code

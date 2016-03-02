@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import timedelta
-from django.contrib.auth import authenticate
 
 
 import hashlib
