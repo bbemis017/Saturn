@@ -1,10 +1,13 @@
 # coding: utf-8
 from django import forms
 from django.contrib.auth.models import User
+from accounts.models import Accounts
 
 
 class SignupForm(forms.ModelForm):
 
+    first_name = forms.CharField(label="first_name",max_length=50)
+    last_name = forms.CharField(label="last_name",max_length=50)
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
@@ -25,8 +28,11 @@ class ResetPasswordForm(forms.Form):
     confirm_password = forms.CharField(label="Confirm Password", max_length=255, widget = forms.PasswordInput)
     verification_code = forms.CharField(label="verification_code", max_length=255)
 
-class EditUserProfileForm(forms.Form):
-    first_name = forms.CharField(label="First Name", max_length=255)
-    last_name = forms.CharField(label="Last Name", max_length=255)
-    birthday = forms.CharField(label="Birthday", max_length=255)
-    job = forms.CharField(label="Job", max_length=255)
+class EditUserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(label="First Name", max_length=50)
+    last_name = forms.CharField(label="Last Name", max_length=50)
+    #birthday = forms.CharField(label="Birthday", max_length=255)
+    #job = forms.CharField(label="Job", max_length=255)
+    class Meta:
+        model = Accounts
+        fields = ('first_name','last_name','bday','job')

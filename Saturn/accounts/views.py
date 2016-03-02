@@ -11,6 +11,7 @@ from accounts.forms import (
     SignupForm,
     SigninForm,
     ForgetForm,
+    EditUserProfileForm,
 )
 from utils.email import EmailService
 
@@ -72,6 +73,8 @@ def signup(request):
     signup_form = SignupForm(request.POST)
 
     if signup_form.is_valid():
+        first_name = signup_form.cleaned_data['first_name'];
+        last_name = signup_form.cleaned_data['last_name'];
         email = signup_form.cleaned_data['email']
         username = signup_form.cleaned_data['username']
         password = signup_form.cleaned_data['password']
@@ -84,7 +87,9 @@ def signup(request):
         user.set_password(password)
         user.save()
         user.account.generate_verification_code()
+        #update values in the account for first_name and last_name
         user.account.save()
+
 
         try:
             EmailService.send_activate_email(user)
@@ -104,12 +109,12 @@ def signup(request):
 def signin(request):
     if request.method != "POST":
         signin_form = SigninForm()
-        return render(request, "accounts/signin.html", locals())
+        return render(request, "accounts/login.html", locals())
 
     signin_form = SigninForm(request.POST)
 
     if signin_form.is_valid():
-        username = signin_form.cleaned_data['username']
+        username = signin_form.cleaned_data['username_or_email']
         password = signin_form.cleaned_data['password']
         key = 'email__iexact' if '@' in username else 'username__iexact'
         if User.objects.filter(**{key: username}).exists():
@@ -119,14 +124,14 @@ def signin(request):
                 django_login(request, user)
                 next = request.GET.get('next', '')
                 if next == '':
-                    next = '/'
+                    next = '/accounts/profile'
                 return HttpResponseRedirect(next)
             else:
                 error = signin_form._errors.setdefault("Unable to log in!", ErrorList())
-                return render(request, "accounts/signin.html", locals())
+                return render(request, "accounts/login.html", locals())
     else:
         login_err = True
-        return render(request, "accounts/Signin.html",locals())
+        return render(request, "accounts/login.html",locals())
 
 def reset_password(request):
     #Set true if user needs to enter confirmation code
@@ -141,21 +146,36 @@ def profile(request):
     if request.user.is_authenticated():
         #the user has logged in
         account = Accounts.objects.get(user=request.user)
+
+        print account
+        editInfo = False 
         if request.method != "POST":
-            editProfile_form = EditUserProfileForm(instance=account)
-            return render(request, "accounts/account_management.html", locals())
+            #editProfile_form = EditUserProfileForm(instance=account)
+            return render(request, "accounts/dashboard.html", locals())
 
-        editProfile_form = EditUserProfileForm(request.POST)
+        if 'edit' in request.POST:
+            #user has clicked on edit
+            editInfo = True
+        elif 'submit' in request.POST:
+            #user has clicked on submit
+            editInfo = False
+
+            print "account"
+            editProfile_form = EditUserProfileForm(request.POST)
+            print editProfile_form.errors
             
-        if editProfile_form.is_valid():
-            #save information 
-            form.save();
-            update_success = True;
-            return render(request, "accounts/account_management.html",locals())
+            if editProfile_form.is_valid():
+                #save information 
+                account.first_name = editProfile_form.cleaned_data['first_name']
+                account.last_name = editProfile_form.cleaned_data['last_name']
+                account.save()
+                print("valid")
+                update_success = True
+                return render(request, "accounts/dashboard.html",locals())
 
-        return render(request, "accounts/edit_user_profile.html", locals())    
+        return render(request, "accounts/dashboard.html", locals())    
     # the user hasn't logged in yet
-    return render(request, "accounts/signin.html", locals())
+    return render(request, "accounts/login.html", locals())
 
 
 def dashboard(request):
