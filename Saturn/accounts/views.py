@@ -123,7 +123,7 @@ def signin(request):
                 return HttpResponseRedirect(next)
             else:
                 error = signin_form._errors.setdefault("Unable to log in!", ErrorList())
-                return render(request, "accounts/signin.html", locals())
+                return render(request, "accounts/login.html", locals())
     else:
         login_err = True
         return render(request, "accounts/Signin.html",locals())
