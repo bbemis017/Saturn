@@ -4,4 +4,5 @@ from website import views
 urlpatterns = [
         #used for testing template only
         url(r'^test/$',views.testTemplate),
+        url(r'(?P<domain>[-\w]+)',views.test),
 ]

@@ -16,16 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from config import views
+from website.models import Website
 
 
 extra_pattern = [
-    url(r'^$', views.home),
-    url(r'^reset_password$', views.reset_password),
-]
+        url(r'^$', views.home),
+        url(r'^reset_password$', views.reset_password),
+        ]
 
 urlpatterns = [
-    url(r'^', include(extra_pattern)),
-    url(r'^accounts/', include('accounts.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'website/',include('website.urls')),
-]
+        url(r'^', include(extra_pattern)),
+        url(r'^accounts/', include('accounts.urls')),
+        url(r'^admin/', admin.site.urls),
+        url(r'website/',include('website.urls')),
+        ]
