@@ -10,13 +10,8 @@ from accounts.models import Accounts
 from accounts.forms import (
     SignupForm,
     SigninForm,
-<<<<<<< HEAD
     EditUserProfileForm,
     ResetPasswordForm,
-=======
-    ForgetForm,
-    EditUserProfileForm,
->>>>>>> 363bee8cc056f4e20c7ccb05dcc9e3ab29d2a58e
 )
 from utils.email import EmailService
 
@@ -205,55 +200,30 @@ def reset_password(request):
 
 @login_required
 def profile(request):
-<<<<<<< HEAD
     account = Accounts.objects.get(user=request.user)
+
+    editInfo = False 
     if request.method != "POST":
-        editProfile_form = EditUserProfileForm()
-        return render(request, "accounts/profile.html", locals())
+        #editProfile_form = EditUserProfileForm(instance=account)
+        return render(request, "accounts/dashboard.html", locals())
 
-    editProfile_form = EditUserProfileForm(request.POST)
+    if 'edit' in request.POST:
+        #user has clicked on edit
+        editInfo = True
+    elif 'submit' in request.POST:
+        #user has clicked on submit
+        editInfo = False
+
+        editProfile_form = EditUserProfileForm(request.POST)
         
-    if editProfile_form.is_valid():
-        form.save();
-        update_success = True;
-        return render(request, "accounts/profile.html",locals())
+        if editProfile_form.is_valid():
+            account.first_name = editProfile_form.cleaned_data['first_name']
+            account.last_name = editProfile_form.cleaned_data['last_name']
+            account.save()
+            update_success = True
+            return render(request, "accounts/dashboard.html",locals())
 
-    return render(request, "accounts/profile.html", locals())    
-=======
-    if request.user.is_authenticated():
-        #the user has logged in
-        account = Accounts.objects.get(user=request.user)
-
-        print account
-        editInfo = False 
-        if request.method != "POST":
-            #editProfile_form = EditUserProfileForm(instance=account)
-            return render(request, "accounts/dashboard.html", locals())
-
-        if 'edit' in request.POST:
-            #user has clicked on edit
-            editInfo = True
-        elif 'submit' in request.POST:
-            #user has clicked on submit
-            editInfo = False
-
-            print "account"
-            editProfile_form = EditUserProfileForm(request.POST)
-            print editProfile_form.errors
-            
-            if editProfile_form.is_valid():
-                #save information 
-                account.first_name = editProfile_form.cleaned_data['first_name']
-                account.last_name = editProfile_form.cleaned_data['last_name']
-                account.save()
-                print("valid")
-                update_success = True
-                return render(request, "accounts/dashboard.html",locals())
-
-        return render(request, "accounts/dashboard.html", locals())    
-    # the user hasn't logged in yet
-    return render(request, "accounts/login.html", locals())
->>>>>>> 363bee8cc056f4e20c7ccb05dcc9e3ab29d2a58e
+    return render(request, "accounts/dashboard.html", locals())    
 
 
 def dashboard(request):
