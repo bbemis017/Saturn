@@ -14,19 +14,15 @@ class SignupForm(forms.ModelForm):
 
 
 class SigninForm(forms.Form):
-    username_or_email = forms.CharField(label="Username or Email", max_length=255)
+    username = forms.CharField(label="Username or Email", max_length=255)
     password = forms.CharField(label="Password", max_length=100, widget = forms.PasswordInput)
-
-
-class ForgetForm(forms.Form):
-    email = forms.EmailField(label="Email")
 
 
 class ResetPasswordForm(forms.Form):
     email = forms.EmailField(label="Email")
     password = forms.CharField(label="Password", max_length=255, widget = forms.PasswordInput)
     confirm_password = forms.CharField(label="Confirm Password", max_length=255, widget = forms.PasswordInput)
-    verification_code = forms.CharField(label="verification_code", max_length=255)
+
 
 class EditUserProfileForm(forms.ModelForm):
     first_name = forms.CharField(label="First Name", max_length=50)

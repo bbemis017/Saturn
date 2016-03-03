@@ -38,35 +38,28 @@
 
     </nav>      
 
-    <div class="container header" style="margin-bottom: 25px;">
-      <h1 align="center">Login</h1>
-    </div>
+	<div class="container header text-center" style="margin-bottom: 25px;">
+        <h1>Login</h1>
+	</div>
 
+	<div class="password_form">
     <form class="form-group" method="POST">
       {% csrf_token %}
-      <div class="password_form">
-        <div class="form-group">
-          <label for=“username”>User Name</label>
-          <input type=“text” class="form-control" id="username" name="username_or_email" placeholder="Username">
-        </div>
+            {% if login_err %}
+            <div id="login-fail" class="alert alert-danger alert-dismissible" role="alert">Username and password pair not match.</div>
+            {% endif %}
+              <label class="control-label">Username</label>
+              <input id="id_username" name="username" type="text" placeholder="Username or Email" class="form-control">
 
-        <div class="form-group" style="margin-top: 15px;">
-          <label for=“Password”>Password</label>
-          <input type="password" class="form-control" id="Password" name="password" placeholder="Password">
-        </div>
-        <button type="submit" value="submit" class="btn btn-secondary btn-block">Login</button>
-        <div class=“row”>
-          <div class="col-md-6 col-md-offset-3">Do not have an account?
-            <a href="/accounts/signup">Sign Up!</a>
-          </div>
-        </div>
-        <div class=“row”>
-          <div class="col-md-6 col-md-offset-3" >Forgot password?
-            <a href="/accounts/reset_password">reset password</a>
-          </div>
-        </div>
-
-      </div>
+              <label class="control-label">Password</label>
+              <input id="id_password" name="password" type="password" placeholder="Password" class="form-control">
+            
+             <div class="checkbox">
+             <label>
+               <a class="pull-left" href="/accounts/reset_password/">Forgot Password?</a>
+             </label>
+             </div>
+            <button type="submit" class="btn btn-info btn-block">Sign Up</button>
     </form>
 
 

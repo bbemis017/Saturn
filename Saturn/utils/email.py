@@ -16,3 +16,14 @@ class EmailService(object):
         msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+    @classmethod
+    def send_verification_email(cls, user):
+        subject, from_email, to = 'Reset Your Password On Saturn', 'no-reply@saturn.com', user.email
+        htmly = get_template('email/reset_password.html')
+        url = 'http://%s/accounts/reset_password/?email=%s&verification_code=%s' \
+                          % (settings.DOMAIN, user.email, user.account.verification_code)
+        html_content = htmly.render(Context(locals()))
+        msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()

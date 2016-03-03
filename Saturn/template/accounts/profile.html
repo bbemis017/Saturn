@@ -43,7 +43,7 @@
     <div class="" id="verification-info">
       {% if verification_success %}
       <div id="verify-success" class="alert alert-success alert-dismissible" role="alert">You have successfully activated your account.</div>
-      {% else %}
+      {% elif verification_success == False %}
       <div id="verify-fail" class="alert alert-danger alert-dismissible" role="alert">Invalid Verification Code. Click <a href="#" class="alert-link" id="resend-email">Resend Email</a>.</div>
       {% endif %}
     </div>
@@ -59,11 +59,8 @@
 
 <script language="javascript">
     {% if email_sent %}
-    $('email-success').show();
-    {% else %}
-    $('email-fail').show();
+    $('#email-success').show();
     {% endif %}
-    alert($.cookie('csrftoken'));
     $('#resend-email').click(function(){
         $.ajax({
             url: "/accounts/verification/",

@@ -10,8 +10,13 @@ from accounts.models import Accounts
 from accounts.forms import (
     SignupForm,
     SigninForm,
+<<<<<<< HEAD
+    EditUserProfileForm,
+    ResetPasswordForm,
+=======
     ForgetForm,
     EditUserProfileForm,
+>>>>>>> 363bee8cc056f4e20c7ccb05dcc9e3ab29d2a58e
 )
 from utils.email import EmailService
 
@@ -29,11 +34,11 @@ def activate(request):
     else:
         return HttpResponseRedirect('/accounts/signup/')
 
-    if not _is_bad_verification(email, verification_code):
+    if _is_bad_verification(email, verification_code):
+        invalid_verification_code = True
+    else:
         user.account.verified = True
         verification_success = True
-    else:
-        invalid_verification_code = True
 
     return render(request, "accounts/profile.html", locals())
 
@@ -42,7 +47,7 @@ def _is_bad_verification(email, verification_code):
     if not User.objects.filter(email=email).exists():
         return True
     user = User.objects.get(email=email)
-
+    
     if user.account.verification_code != verification_code or \
             user.account.expire_at is not None and user.account.expire_at < timezone.now():
         return True
@@ -51,10 +56,11 @@ def _is_bad_verification(email, verification_code):
 
 
 @login_required
-@ratelimit(key='post:email', rate='5/m', block=True)
+@ratelimit(key='post:email', rate='5/m', block=True, method=['POST'])
 def send_verification_email(request):
     email_sent = False
     if request.is_ajax:
+        user = request.user
         user.account.generate_verification_code()
         user.account.save()
         user.save()
@@ -64,7 +70,7 @@ def send_verification_email(request):
     })
 
 
-@ratelimit(key='post:email', rate='5/m', block=True)
+@ratelimit(key='post:email', rate='5/m', block=True, method=['POST'])
 def signup(request):
     if request.method != "POST":
         signup_form = SignupForm()
@@ -95,17 +101,19 @@ def signup(request):
             EmailService.send_activate_email(user)
             email_sent = True
         except:
-            email_sent = False
+            email_sent_fail = False
 
         user = authenticate(username=username, password=password)
         django_login(request, user)
         next = request.GET.get('next', '')
         if next == '':
-            next = '/'
+            next = '/accounts/profile/'
         return HttpResponseRedirect(next) 
 
     return render(request, "accounts/signup.html", locals())
 
+
+@ratelimit(key='post:username', rate='5/m', block=True, method=['POST'])
 def signin(request):
     if request.method != "POST":
         signin_form = SigninForm()
@@ -113,36 +121,105 @@ def signin(request):
 
     signin_form = SigninForm(request.POST)
 
-    if signin_form.is_valid():
-        username = signin_form.cleaned_data['username_or_email']
-        password = signin_form.cleaned_data['password']
-        key = 'email__iexact' if '@' in username else 'username__iexact'
-        if User.objects.filter(**{key: username}).exists():
-            user = User.objects.get(**{key: username})
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                django_login(request, user)
-                next = request.GET.get('next', '')
-                if next == '':
-                    next = '/accounts/profile'
-                return HttpResponseRedirect(next)
-            else:
-                error = signin_form._errors.setdefault("Unable to log in!", ErrorList())
-                return render(request, "accounts/login.html", locals())
-    else:
+    if not signin_form.is_valid():
         login_err = True
         return render(request, "accounts/login.html",locals())
+        
+    username = signin_form.cleaned_data['username']
+    password = signin_form.cleaned_data['password']
+    key = 'email__iexact' if '@' in username else 'username__iexact'
+    if User.objects.filter(**{key: username}).exists():
+        user = User.objects.get(**{key: username})
+        user = authenticate(username=username, password=password)
+        if user is None:
+            login_err = True
+            return render(request, "accounts/login.html", locals())
+    else:
+        login_err = True
+        return render(request, "accounts/login.html", locals())
 
+    django_login(request, user)
+    next = request.GET.get('next', '')
+    if next == '':
+        next = '/accounts/profile/'
+    return HttpResponseRedirect(next)
+
+
+@ratelimit(key='post:email', rate='10/m', block=True, method=['POST'])
 def reset_password(request):
-    #Set true if user needs to enter confirmation code
-    enterconfirmation = False
-    #Set true if user needs to enter new password
-    enterpassword = False
+    if 'email' not in request.GET and 'email' not in request.POST:
+        reset_missing_email = True
+        return render(request, "accounts/reset_password.html", locals())
 
-    return render(request, 'accounts/reset_password.html',locals())
+    if 'email' in request.POST and 'verification_code' not in request.GET:
+        email_sent = True
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email__iexact=email)
+            user.account.generate_verification_code()
+            user.account.save()
+            EmailService.send_verification_email(user)
+        except:
+            email_not_exist = True
+        return render(request, "accounts/reset_password.html", locals())
+
+    if 'verification_code' not in request.GET:
+        verification_code_error = True
+        return render(request, "accounts/reset_password.html", locals())
+
+    email = request.GET.get('email')
+    verification_code = request.GET.get('verification_code')
+
+    forgot_form = ResetPasswordForm(request.POST)
+
+    if _is_bad_verification(email, verification_code):
+        bad_verification = True
+        return render(request, "accounts/reset_password.html", locals())
+
+    if request.method != 'POST':
+        return render(request, "accounts/reset_password.html", locals())
+
+    if not forgot_form.is_valid():
+        return render(request, "accounts/reset_password.html", locals())
+
+    if forgot_form.cleaned_data['password'] != forgot_form.cleaned_data['confirm_password']:
+        confirm_password_error = True
+        return render(request, "accounts/reset_password.html", locals())
+
+    user = User.objects.get(email=forgot_form.cleaned_data['email'])
+    user.set_password(forgot_form.cleaned_data['password'])
+    user.save()
+
+    account = user.account
+    account.verification_code = "%s" % timezone.now()
+    account.expire_at = timezone.now()
+    account.save()
+
+    user = authenticate(username=user.username, password=forgot_form.cleaned_data['password'])
+    django_login(request, user)
+
+    next = request.GET.get('next', '')
+    if next == '':
+        next = '/accounts/profile/'
+    return HttpResponseRedirect(next)
 
 @login_required
 def profile(request):
+<<<<<<< HEAD
+    account = Accounts.objects.get(user=request.user)
+    if request.method != "POST":
+        editProfile_form = EditUserProfileForm()
+        return render(request, "accounts/profile.html", locals())
+
+    editProfile_form = EditUserProfileForm(request.POST)
+        
+    if editProfile_form.is_valid():
+        form.save();
+        update_success = True;
+        return render(request, "accounts/profile.html",locals())
+
+    return render(request, "accounts/profile.html", locals())    
+=======
     if request.user.is_authenticated():
         #the user has logged in
         account = Accounts.objects.get(user=request.user)
@@ -176,6 +253,7 @@ def profile(request):
         return render(request, "accounts/dashboard.html", locals())    
     # the user hasn't logged in yet
     return render(request, "accounts/login.html", locals())
+>>>>>>> 363bee8cc056f4e20c7ccb05dcc9e3ab29d2a58e
 
 
 def dashboard(request):
