@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sites</title>
+    <title>Create Site</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{% static "bootstrap-3.3.6/css/bootstrap.min.css" %}" rel="stylesheet">
@@ -45,32 +45,34 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Sites
+                            Create Site 
                         </h1>
                     </div>
                 </div>
-                <form class="form-group" method="POST">
-                  {% csrf_token %}
-                  <button name="createSite" type="submit" class="btn btn-success btn-md">Create Site</button>
-                </form>
                 <!-- /.row -->
-				<div class="col-lg-12">
-                        <div class="list-group"> <a href="#" class="list-group-item active">
-                                <h2 class="list-group-item-heading">Resume</h2>
-                                <p class="list-group-item-text">Here's all the resumes that you have created</p>
-                            </a>
-                            {% for website in websites %}
-                            <div class="list-group-item">
-                              <h4 class="list-group-item-heading">{{ website.domain }}</h4>
-                              <p class="list-group-item-text">First Name: John    Last Name: Smith    Birthday: 12/12/1991</p>
-                                <a class="list-group-item-text" href="#">Edit &raquo;</a>
-                                <a class="list-group-item-text" href="#">Delete &raquo;</a>
-                                <a class="list-group-item-text" href="/website/{{ website.domain }}">View &raquo</a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
 
+                <div class="row">
+                	<div class="col-lg-12">
+                        <form class="form-group" method="POST">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <label class="control-label">Enter sub-domain</label></br>
+                            <label class="control-label">http://52.71.144.214/website/</label>
+                            <input name="domain" type="text">
+                          </div>
+                          {% if errorDomainExists %}
+                            <div class="alert alert-md alert-danger" role="alert">
+                              Domain: {{ domain }} already Exists. Please try another
+                            </div>
+                          {% endif %}
+                          <input name="user_id" value="{{ request.user.id }}" class="hidden">
+                          <div class="form-group">
+                            <button name="submit" type="submit" class="btn btn-info btn-md">Save</button>
+                          </div>
+                        </form>
+                    </div>
+                </div>
+                
 
             </div>
             <!-- /.container-fluid -->
@@ -82,14 +84,10 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
-    <script src="{% static "js/jquery.js"%}"></script>
+    <script src="{% static "js/jquery.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js"%}"></script>
-
-    <script>
-        document.getElementById("sites").className += "active";
-    </script>
+    <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
 
 </body>
 

@@ -7,6 +7,7 @@ from django.contrib.auth import login as django_login, authenticate
 from ratelimit.decorators import ratelimit
 from django.forms.utils import ErrorList
 from accounts.models import Accounts
+from website.models import Website
 from accounts.forms import (
     SignupForm,
     SigninForm,
@@ -74,8 +75,6 @@ def signup(request):
     signup_form = SignupForm(request.POST)
 
     if signup_form.is_valid():
-        first_name = signup_form.cleaned_data['first_name'];
-        last_name = signup_form.cleaned_data['last_name'];
         email = signup_form.cleaned_data['email']
         username = signup_form.cleaned_data['username']
         password = signup_form.cleaned_data['password']
@@ -88,7 +87,6 @@ def signup(request):
         user.set_password(password)
         user.save()
         user.account.generate_verification_code()
-        #update values in the account for first_name and last_name
         user.account.save()
 
 
@@ -226,8 +224,17 @@ def profile(request):
     return render(request, "accounts/dashboard.html", locals())    
 
 
-def dashboard(request):
-    return render(request, "accounts/dashboard.html", locals())
-
+@login_required
 def sites(request):
+
+    account = Accounts.objects.get(user=request.user)
+    websites = Website.objects.filter(user=request.user)
+
+    if request.method == "POST":
+
+        #create Site
+        if 'createSite' in request.POST:
+            return HttpResponseRedirect("/sites/createSite")
+
+    #otherwise render site page
     return render(request, "accounts/sites.html", locals())

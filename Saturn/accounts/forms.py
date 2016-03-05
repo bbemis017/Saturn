@@ -6,8 +6,6 @@ from accounts.models import Accounts
 
 class SignupForm(forms.ModelForm):
 
-    first_name = forms.CharField(label="first_name",max_length=50)
-    last_name = forms.CharField(label="last_name",max_length=50)
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
