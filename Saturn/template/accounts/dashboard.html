@@ -40,7 +40,17 @@
         <div id="page-wrapper">
 
             <div class="container-fluid">
-
+                <div class="" id="verification-info">
+                  {% if verification_success %}
+                  <div id="verify-success" class="alert alert-success alert-dismissible" role="alert">You have successfully activated your account.</div>
+                  {% elif verification_success == False %}
+                  <div id="verify-fail" class="alert alert-danger alert-dismissible" role="alert">Invalid Verification Code. Click <a href="#" class="alert-link" id="resend-email">Resend Email</a>.</div>
+                  {% endif %}
+                </div>
+                <div id="email-info">
+                  <div id="email-success" class="alert alert-success alert-dismissible" role="alert" style="display:none;">Email Sent! Check it!</div>
+                  <div id="email-fail" class="alert alert-danger alert-dismissible" role="alert" style="display:none;">Email sent failed!! Please <a href="#" class="alert-link" id="resend-email">try again</a> later.</div>
+                </div>
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -53,6 +63,12 @@
 
                 <div class="row">
                 	<div class="col-lg-12">
+                    {% if editProfile_form.errors %}
+                    <div id="form-error" class="alert alert-danger alert-dismissible" role="alert">
+                    Invalid First name or Last name.
+                    </div>
+                    {% endif %}
+                    <!-- This is not a good way to implement it. We can try to use ajax to deal with it later.-->
                       {% if editInfo %}
                         <form id="submitChanges" class="form-group" method="POST">
                           {% csrf_token %}
@@ -71,8 +87,10 @@
                         </form>
                       {% endif %}
                       {% if not editInfo %}
+                      <div class="lead">
                         <p>First name: {{ account.first_name }}</p>
                         <p>Last name: {{ account.last_name }}</p>
+                      </div>
                       {% endif %}
                     </div>
                 </div>
@@ -105,11 +123,33 @@
 
     <!-- jQuery -->
     <script src="{% static "js/jquery.js" %}"></script>
-
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
-    <script>
-        document.getElementById("dashboard").className += "active";
+    <script language="javascript">
+        {% if email_sent %}
+        $('#email-success').show();
+        {% endif %}
+        $('#resend-email').click(function(){
+            $.ajax({
+                url: "/accounts/verification/",
+                type: "POST",
+                async: true,
+                dataType: 'json',
+                data: {
+                  'csrfmiddlewaretoken': $.cookie('csrftoken')
+                },
+                success: function (data) {
+                  email_sent = data.email_sent;
+                  $('#email-success').show();
+                },
+                error: function(data) {
+                  $('#email-fail').show();
+                  console.log(data);
+                },
+            });
+        });
+        $("#dashboard").addClass("active");
     </script>
 
 

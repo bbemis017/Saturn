@@ -36,7 +36,7 @@ def activate(request):
         user.account.verified = True
         verification_success = True
 
-    return render(request, "accounts/profile.html", locals())
+    return render(request, "accounts/dashboard.html", locals())
 
 
 def _is_bad_verification(email, verification_code):
@@ -200,9 +200,7 @@ def reset_password(request):
 def profile(request):
     account = Accounts.objects.get(user=request.user)
 
-    editInfo = False 
     if request.method != "POST":
-        #editProfile_form = EditUserProfileForm(instance=account)
         return render(request, "accounts/dashboard.html", locals())
 
     if 'edit' in request.POST:
@@ -211,9 +209,8 @@ def profile(request):
     elif 'submit' in request.POST:
         #user has clicked on submit
         editInfo = False
-
         editProfile_form = EditUserProfileForm(request.POST)
-        
+
         if editProfile_form.is_valid():
             account.first_name = editProfile_form.cleaned_data['first_name']
             account.last_name = editProfile_form.cleaned_data['last_name']
