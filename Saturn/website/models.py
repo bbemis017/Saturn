@@ -4,14 +4,21 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+class Template(models.Model):
+    title = models.CharField(max_length=50)    
+    path = models.CharField(max_length=50,null=True)
+
+class ResumeTemplate(Template):
+    author = models.CharField(max_length=50)
+    description = models.CharField(max_length=150,null=True)
 
 class Website(models.Model):
     user = models.ForeignKey(User)
-    path = models.CharField(max_length=50,null=True,blank=True)
+    path = models.CharField(max_length=50,null=True)
     domain = models.CharField(max_length=50)
+    template = models.ForeignKey(Template)
 
     created_at = models.DateTimeField(default=timezone.now)
-
 
 class Section(models.Model):
     heading = models.CharField(max_length=550)

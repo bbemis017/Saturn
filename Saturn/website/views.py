@@ -1,19 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from website.models import Website
-from website.forms import CreateSiteForm
+from website.models import Template
+from website.forms import CreateSiteForm,CreateTemplateForm
 from accounts.models import Accounts
 
 
 def testTemplate(request):
     return render(request,"website/resumeTemplate.html",locals())
 
-def test(request,domain):
+def displaySite(request,domain):
     website = Website.objects.get(domain=domain)
+    template = website.template
     return render(request,"website/resumeTemplate.html",locals())
-    #not necessary
-    #return HttpResponseRedirect(website.path)
-
+     
 @login_required
 def createSite(request):
     #for information displayed on navigation bar
@@ -22,15 +22,19 @@ def createSite(request):
     if request.method == "POST":
 
        createSiteForm = CreateSiteForm(request.POST)
-       if createSiteForm.is_valid():
-
+       createTemplateForm = CreateTemplateForm(request.POST)
+       if createSiteForm.is_valid() and createTemplateForm.is_valid():
            domain = createSiteForm.cleaned_data['domain']
-
+           title = createTemplateForm.cleaned_data['title']
+           
            #check if site exists
            if not Website.objects.filter(domain=domain).exists():
+               template = Template.objects.create(title=title,path="website/resumeTemplate.html")
+               template.save()
                #create Site
-               website = Website.objects.create(user=request.user)
+               website = Website.objects.create(user=request.user,template=template)
                website.domain = domain
+               website.template = template
                website.save()
                return HttpResponseRedirect("/accounts/sites")
            else:
