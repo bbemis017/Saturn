@@ -14,6 +14,7 @@ from accounts.forms import (
     EditUserProfileForm,
     ResetPasswordForm,
 )
+from website.forms import DeleteSiteForm
 from utils.email import EmailService
 
 
@@ -229,9 +230,32 @@ def sites(request):
 
     if request.method == "POST":
 
+        #create delete form
+        deleteForm = DeleteSiteForm(request.POST)
+        print "post"
         #create Site
         if 'createSite' in request.POST:
             return HttpResponseRedirect("/sites/createSite")
+        elif 'deleteBtn' in request.POST:
+            print "deleteBtn"
+            if deleteForm.is_valid():
+                domain = deleteForm.cleaned_data['domain']
+
+                if not Website.objects.filter(domain=domain).exists():
+                    # website does not exist, do nothing
+                    print "error. Website does not exist, this should not "
+                    return render(request, "accounts/dashboard.html", locals())
+                else:
+                        #delete the website
+                    website = Website.objects.get(domain = domain)
+                    website.template.delete()
+                    website.delete()
+            # delete the template
+        #    try:
+         #       template = ResumeTemplate.objects.get()
+          #      template.delete()
+          # except ResumeTemplate.objects.DoesNotExist:
+          #      template = None
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())

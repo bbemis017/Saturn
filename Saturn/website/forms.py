@@ -17,3 +17,8 @@ class CreateResumeTemplateForm(forms.ModelForm):
         model = ResumeTemplate
         fields = ('author','description',)
 
+class DeleteSiteForm(forms.ModelForm):
+	class Meta:
+		model = Website
+		fields = ('domain',)
+

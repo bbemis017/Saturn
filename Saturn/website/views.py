@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from website.models import Website
 from website.models import Template, ResumeTemplate
-from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm
+from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 
 
