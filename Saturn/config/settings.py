@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     # apps
     'accounts',
     'website',
+    'section',
 
     # third party
+    'django_markdown',
 ]
 
 MIDDLEWARE_CLASSES = [

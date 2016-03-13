@@ -1,3 +1,5 @@
 Django==1.9.1
 django-allauth==0.24.1
 django-ratelimit==0.6.0
+django-markdown==0.8.4
+django-uuslug==1.1.7

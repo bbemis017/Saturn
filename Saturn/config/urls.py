@@ -30,4 +30,5 @@ urlpatterns = [
         url(r'^admin/', admin.site.urls),
         url(r'^sites/',include('website.staticUrls')),
         url(r'website/',include('website.urls')),
+        url(r'^markdown/', include('django_markdown.urls')),
         ]

@@ -16,7 +16,7 @@ class Website(models.Model):
     user = models.ForeignKey(User)
     path = models.CharField(max_length=50,null=True)
     domain = models.CharField(max_length=50)
-    template = models.ForeignKey(Template)
+    template = models.ForeignKey(Template, null=True)
 
     created_at = models.DateTimeField(default=timezone.now)
 
