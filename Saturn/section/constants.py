@@ -8,3 +8,7 @@ STATUS_CHOICES = (
     (Status.PUBLIC, 'Public'),
     (Status.PRIVATE, 'Private'),
 )
+
+class SectionTypes:
+    DEFAULT = 0
+    POST = 1

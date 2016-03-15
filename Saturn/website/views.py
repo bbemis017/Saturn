@@ -4,6 +4,8 @@ from website.models import Website
 from website.models import Template, ResumeTemplate
 from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
+from section.models import Section, Post
+from section.constants import SectionTypes
 
 
 def displaySite(request,domain):
@@ -13,6 +15,22 @@ def displaySite(request,domain):
     template = website.template
     if template.path == "website/resumeTemplate.html":
         template = template.resumetemplate
+
+    sections = list(Section.objects.filter(template=template))
+
+    #change type of section to subclass
+    for section in sections:
+        if section.childType == SectionTypes.POST:
+            temp = section.unique_name
+            sections.append(Post.objects.get(unique_name=section.unique_name))
+            sections.remove(section)
+        elif section.childType == SectionTypes.DEFAULT:
+            print "default"
+        else:
+            #undefined child type
+            print "error in displaySite"
+            print "undefined Section Type: " + section.childType
+
 
     return render(request,template.path,locals())
      

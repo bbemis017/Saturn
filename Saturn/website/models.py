@@ -20,8 +20,3 @@ class Website(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
 
-class Section(models.Model):
-    heading = models.CharField(max_length=550)
-    paragraph = models.CharField(max_length=1000)
-    classes = models.CharField(max_length=250)
-

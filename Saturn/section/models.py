@@ -6,7 +6,8 @@ from uuslug import slugify
 from website.models import Template
 from section.constants import (
     Status,
-    STATUS_CHOICES
+    STATUS_CHOICES,
+    SectionTypes
 )
 
 
@@ -15,7 +16,9 @@ class Section(models.Model):
                                     blank=True, editable=False)
     alias = models.SlugField(max_length=255, blank=True)
     title = models.CharField(max_length=255, unique=True)
+    classes = models.CharField(max_length=255, default='section')
     template = models.ForeignKey(Template)
+    childType = models.IntegerField(default=SectionTypes.DEFAULT,blank=False)
 
     def save(self, *args, **kwargs):
         self.unique_name = slugify(self.title)

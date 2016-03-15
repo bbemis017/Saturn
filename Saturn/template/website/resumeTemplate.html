@@ -18,6 +18,7 @@
     <!-- Custom CSS -->
     <link href="{% static "css/scrolling-nav.css"%}" rel="stylesheet">
 
+
  
 
 </head>
@@ -28,22 +29,17 @@
 
 
    <!--scrolling nav bar -->
-    <!-- About Section -->
-        {% include 'website/scrollingNavBar.html' %}
+   {% include 'website/scrollingNavBar.html' %}
 
     
-
-    <!-- Contact Section
-    <section id="template" class="contact-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1>Blank Template</h1>
-                </div>
-            </div>
-        </div>
-    </section> -->
-{% include 'website/post.html' %}
+   {% for section in sections %}
+      {% ifequal section.childType 1 %}
+        {% include 'website/post.html' %}
+      {% endifequal %}
+      {% ifequal section.childType 0 %}
+        {% include 'website/section.html' %}
+      {% endifequal %}
+   {% endfor %}
 
     <!-- jQuery -->
     <script src="{% static "js/jquery.js" %}"></script>
