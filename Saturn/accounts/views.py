@@ -235,3 +235,8 @@ def sites(request):
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())
+
+
+
+
+
