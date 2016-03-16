@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
+from django.http import JsonResponse
 from website.models import Website
 from website.models import Template, ResumeTemplate
 from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 from section.models import Section, Post
 from section.constants import SectionTypes
+
 
 
 def displaySite(request,domain):
@@ -16,21 +18,7 @@ def displaySite(request,domain):
     if template.path == "website/resumeTemplate.html":
         template = template.resumetemplate
 
-    sections = list(Section.objects.filter(template=template))
-
-    #change type of section to subclass
-    for section in sections:
-        if section.childType == SectionTypes.POST:
-            temp = section.unique_name
-            sections.append(Post.objects.get(unique_name=section.unique_name))
-            sections.remove(section)
-        elif section.childType == SectionTypes.DEFAULT:
-            print "default"
-        else:
-            #undefined child type
-            print "error in displaySite"
-            print "undefined Section Type: " + section.childType
-
+    sections = Section.objects.filter(template=template)
 
     return render(request,template.path,locals())
      
@@ -41,6 +29,16 @@ def createSite(request):
 
     if request.method == "POST":
 
+       #if client requests to check domain availability
+       if 'domain_json' in request.POST:
+           domain_json = request.POST.get('domain_json')
+           response_data = {}
+           if Website.objects.filter(domain=domain_json).exists():
+               response_data['exists'] = 1
+           else:
+               response_data['exists'] = 0
+           return JsonResponse(response_data)
+       
        createSiteForm = CreateSiteForm(request.POST)
        createTemplateForm = CreateTemplateForm(request.POST)
        createResumeTemplateForm = CreateResumeTemplateForm(request.POST)

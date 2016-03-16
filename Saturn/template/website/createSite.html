@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,86 +21,157 @@
 
     <!-- Custom Fonts -->
     <link href="{% static "css/font-awesome.css" %}" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-</head>
-
-<body>
+  </head>
+  <body>
 
     <div id="wrapper">
 
-        {% include 'accounts/sidebar.html' %}
+      {% include 'accounts/sidebar.html' %}
 
-        <div id="page-wrapper">
+      <div id="page-wrapper">
 
-            <div class="container-fluid">
+        <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Create Site 
-                        </h1>
-                    </div>
-                </div>
-                <!-- /.row -->
-
-                <div class="row">
-                	<div class="col-lg-12">
-                        <form class="form-group" method="POST">
-                          {% csrf_token %}
-                          <div class="form-group">
-                            <label class="control-label">Enter sub-domain</label></br>
-                            <label class="control-label">http://52.71.144.214/website/</label>
-                            <input name="domain" type="text">
-
-                            </br>
-                            <label class="control-label">Enter Title</label>
-                            <input name="title" type = "text">
-
-                            </br>
-                            <label class="control-label">Author:</label>
-                            <input name="author" type="text">
-
-                            </br>
-                            <label class="control-panel">Descrption</label>
-                            <input name="description" type="text">
-                          </div>
-                          {% if errorDomainExists %}
-                            <div class="alert alert-md alert-danger" role="alert">
-                              Domain: {{ domain }} already Exists. Please try another
-                            </div>
-                          {% endif %}
-                          <input name="user_id" value="{{ request.user.id }}" class="hidden">
-                          <div class="form-group">
-                            <button name="submit" type="submit" class="btn btn-info btn-md">Save</button>
-                          </div>
-                        </form>
-                    </div>
-                </div>
-                
-
+          <!-- Page Heading -->
+          <div class="row">
+            <div class="col-lg-12">
+              <h1 class="page-header">
+                Create Site 
+              </h1>
             </div>
-            <!-- /.container-fluid -->
+          </div>
+          <!-- /.row -->
+
+          <div class="row">
+            <div class="col-lg-6 col-lg-offset-3">
+              <form class="form-horizontal" method="POST">
+                {% csrf_token %}
+
+                <h3><b>Enter a sub-domain</b></h2>
+                <div id="domainDiv" class="form-group has-feedback">
+                  <label class="control-label">http://52.71.144.214/website/</label>
+                  <input id="domain" name="domain" type="text" class="form-control">
+                  <i id="domainIcon" class="glyphicon form-control-feedback"></i>
+                </div>
+                <div id="domainExists" {% if not errorDomainExists %}hidden{% endif %} class="alert alert-md alert-danger" role="alert">
+                  Domain: {{ domain }} already Exists. Please try another
+                </div>
+
+                <br/><br/>
+                <h3><b>The Basics</b></h3>
+                <div class="form-group">
+                  <label class="control-label">Enter title</label>
+                  <input name="title" type="text" class="form-control"/>
+                  <br/>
+
+                  <label class="control-label">Author</label><br/>
+                  <input name="author" type="text" class="form-control"/>
+                  <br/>
+
+                  <label class="control-panel">Description</label><br/>
+                  <textarea name="description" class="form-control" rows="2"></textarea>
+                </div>
+
+                <!-- introduction -->
+                <br/><br/>
+                <h3><b>Introduction<b></h3>
+                <div class="form-group">
+                  <label class="control-label">Name</label><br/>
+                  <input name="name" type="text" class="form-control"/>
+                  <br/>
+
+                  <label class="control-label">Education</label><br/>
+                  <input name="education" type="text" class="form-control"/>
+                  <br/>
+
+                  <label class="control-label">Majors</label><br/>
+                  <div class="row">
+                    <div class="col-xs-10">
+                      <input id="major1" name="major1" type="text" class="form-control"/>
+                    </div>
+                    <div class="col-xs-2">
+                      <button type="button" class="btn btn-primary btn-sm">delete</button>
+                    </div>
+                  <div>
+
+                  <div class="row">
+                    <div class="col-xs-2 col-xs-offset-10">
+                      <button id="addMajor" type="button" class="btn btn-primary btn-sm">Add</button>
+                    </div>
+                  </div>
+
+                  <label class="control-label">Gpa</label><br/>
+                  <input name="gpa" type="text" class="form-control"/>
+                  <br/>
+
+                  <label class="control-label">Languages</label><br/>
+                  <input id="language1" name="language1" type="text" class="form-control"/>
+                  <button id="addLanguage" type="button" class="btn btn-primary btn-sm pull-right">Add</button>
+                  <br/>
+                </div>
+
+                <!-- Experience -->
+                <br/><br/>
+                <h3><b>Experience</b></h3>
+                <div class="form-group">
+                  <label class="control-label">Work/Leadership Experience</label><br/>
+                  <textarea name="experience" class="form-control" rows="6"></textarea>
+                  <br/>
+
+                  <label class="control-label">Skill</label><br/>
+                  <input id="skill1" name="skill1" type="text" class="form-control"/>
+                  <button id="addSkill" type="button" class="btn btn-primary btn-sm pull-right">Add</button>
+                </div>
+
+                <!-- add -->
+                <br/><br/>
+                <h3><b>Add your own section</b></h3>
+                <div hidden id="section1" class="form-group">
+                  <label class="control-label">Section Title</label><br/>
+                  <input id="sectionTitle1" name="sectionTitle1" class="form-control"/>
+                  <br/>
+
+                  <label class="control-label">content</label><br/>
+                  <textarea id="sectionContent1" name="sectionContent1" class="form-control" rows="6"></textarea>
+                  <br/>
+
+                </div>
+
+                <div class="form-group">
+                  <button id="addSection" type="button" class="btn btn-primary btn-sm pull-right">Add</button>
+                </div>
+
+                <div class="form-group">
+                  <button name="submit" type="submit" class="btn btn-info btn-md">Publish</button>
+                </div>
+
+                <input name="user_id" value="{{ request.user.id }}" class="hidden">
+              </form>
+            </div>
+          </div>
+
 
         </div>
-        <!-- /#page-wrapper -->
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
+    <script>
+      var csrf_token = "{{ csrf_token }}"
+    </script>
     <!-- jQuery -->
     <script src="{% static "js/jquery.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
 
-</body>
+    <!-- custom javascript -->
+    <script src="{% static "js/createSite.js" %}"></script>
+
+  </body>
 
 </html>
