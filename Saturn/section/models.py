@@ -55,6 +55,18 @@ class Photo(Section):
         return u'%s' % self.__str__()
 
 
+class Summary(Section):
+    user = models.ForeignKey(User, blank=True)
+    content = MarkdownField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '%s %s' % (self.id, self.title)
+
+    def __unicode__(self):
+        return u'%s' % self.__str__()
+
+
 class Post(Section):
     author = models.ForeignKey(User, blank=True)
     content = MarkdownField(blank=True)

@@ -12,3 +12,4 @@ STATUS_CHOICES = (
 class SectionTypes:
     DEFAULT = 0
     POST = 1
+    SUMMARY = 2
