@@ -8,19 +8,34 @@ $('#addLanguage').click(addLanguage);
 $('#addSkill').click(addSkill);
 $('#addSection').click(addSection);
 
+$('#submit').click(submitForm);
+
 //variables
+var csrf_token = $.cookie('csrftoken');
 var domainApproved = false;
+
 var numMajors = 1;
 var numLanguages = 1;
 var numSkills = 1;
 var numSection = 0;
+
+//easier to manage
+var majors = [];
+var languages = [];
+var skills = [];
+var sections = [];
+
+majors.push( $('#major1') );
+languages.push( $('#language1') );
+skills.push( $('#skill1') );
 
 /**
  * adds Section
  */
 function addSection(){
   if( numSection == 0){
-    $('#section1').show();
+    sections.push( $('#section1') );
+    sections[0].show();
     numSection++;
   }
   else{
@@ -42,6 +57,7 @@ function addSection(){
     content.attr("name","sectionContent"+numSection);
 
     $("#section"+(numSection - 1)).after(newDiv);
+    sections.push( $("section"+(numSection - 1)) );
   }
 }
 
@@ -54,6 +70,7 @@ function addSkill(){
   var id = "skill" + numSkills;
   var textBox = createTextBox(id);
   $(prevId).after(textBox);
+  skills.push( $("#skill" + numSkills));
 }
 
 /**
@@ -65,6 +82,7 @@ function addLanguage(){
   var id = "language" + numLanguages;
   var textBox = createTextBox(id);
   $(prevId).after(textBox);
+  languages.push(textBox);
 }
 
 /**
@@ -76,6 +94,7 @@ function addMajor(){
   var id = "major" + numMajors;
   var textBox = createTextBox(id);
   $(prevId).after(textBox);
+  majors.push(textBox);
 }
 
 /**
@@ -91,15 +110,94 @@ function createTextBox(id){
 }
 
 /**
+ * Takes an array of html elements and returns a
+ * stringified version of the values in those elements
+ */
+function getValues(elementArray){
+  var newArray = [];
+  for(var i = 0; i < elementArray.length; i++){
+    newArray.push( elementArray[i].val());
+  }
+  
+  return JSON.stringify(newArray);
+}
+
+/**
+ * Stringifies the Section into an array
+ *   -even elements are the section title
+ *   -odd elements are the content
+ */
+function getSectionValues(){
+  var newArray = [];
+  for(var i = 0; i < sections.length; i++){
+    var title = sections[i].find("[name='title']");
+    var content = sections[i].find("[name='content']");
+    newArray.push( title.val() );
+    newArray.push( content.val() );
+  }
+  return JSON.stringify(newArray);
+}
+
+/**
+ * Submit button is clicked
+ */
+function submitForm(){
+  console.log("submit");
+  //TODO:do some error checking
+  //backend should expect errors in data anyways tho
+
+  var skillVal = getValues(skills);
+  var languageVal = getValues(languages);
+  var majorVal = getValues(majors);
+
+  var sectionVal = getSectionValues();
+
+  //data to send to server, submit 1 signifies that this ajax is a form submission
+  var data = { submit : '1' , skills : skillVal, languages : languageVal,
+    majors : majorVal, sections : sectionVal, domain : $('#domain').val(), 
+    title : $('#title').val(), author : $('#author').val(),
+    description : $('#description').val(), name : $('#name').val(),
+    education : $('#education').val(), gpa : $('#gpa').val(),
+    experience : $('#experience').val()};
+
+  sendAjax("/sites/createSite/",data,submitResponse);
+} 
+
+/*
+ * response from server after form is submitted
+ */
+function submitResponse(json){
+  //TODO: display error messages if necessary
+  if( json.redirect){
+    window.location.href = json.redirect;
+  }
+  else if(json.error){
+    $('html,body').animate({ scrollTop: 0},'fast');
+  }
+  else{
+    console.log("undefined submitResponse");
+  }
+}
+
+/**
+ * Sends data to url through ajax adds csrf token to data
+ * @param url - String to url
+ * @param data - data to send to the server
+ * @param sucessCall - function to call after successful connection
+ * @param errorCall - function to call if ajax fails
+ */
+function sendAjax(url,data, successCall){
+  data['csrfmiddlewaretoken'] = csrf_token;
+  $.ajax({url: url, type : "POST", data: data, success : successCall, error : responseFailure });
+}
+
+/**
  * send domain that the user entered to the backend
  */
 function checkDomain(){
   var domain = $('#domain').val()
-  $.ajax({url : "/sites/createSite/", type : "POST",
-  data : { csrfmiddlewaretoken: csrf_token , domain_json : domain },
-    success : domainResponse,
-    error : responseFailure
-  });
+  var data = {domain_check : '1', domain_json : domain};
+  sendAjax("/sites/createSite/",data,domainResponse);
 }
 
 /**

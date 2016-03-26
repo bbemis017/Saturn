@@ -61,15 +61,15 @@
                 <h3><b>The Basics</b></h3>
                 <div class="form-group">
                   <label class="control-label">Enter title</label>
-                  <input name="title" type="text" class="form-control"/>
+                  <input id="title" name="title" type="text" class="form-control"/>
                   <br/>
 
                   <label class="control-label">Author</label><br/>
-                  <input name="author" type="text" class="form-control"/>
+                  <input id="author" name="author" type="text" class="form-control"/>
                   <br/>
 
                   <label class="control-panel">Description</label><br/>
-                  <textarea name="description" class="form-control" rows="2"></textarea>
+                  <textarea id="description" name="description" class="form-control" rows="2"></textarea>
                 </div>
 
                 <!-- introduction -->
@@ -77,11 +77,11 @@
                 <h3><b>Introduction<b></h3>
                 <div class="form-group">
                   <label class="control-label">Name</label><br/>
-                  <input name="name" type="text" class="form-control"/>
+                  <input id="name" name="name" type="text" class="form-control"/>
                   <br/>
 
                   <label class="control-label">Education</label><br/>
-                  <input name="education" type="text" class="form-control"/>
+                  <input id="description" name="education" type="text" class="form-control"/>
                   <br/>
 
                   <label class="control-label">Majors</label><br/>
@@ -101,7 +101,7 @@
                   </div>
 
                   <label class="control-label">Gpa</label><br/>
-                  <input name="gpa" type="text" class="form-control"/>
+                  <input id="gpa" name="gpa" type="text" class="form-control"/>
                   <br/>
 
                   <label class="control-label">Languages</label><br/>
@@ -115,7 +115,7 @@
                 <h3><b>Experience</b></h3>
                 <div class="form-group">
                   <label class="control-label">Work/Leadership Experience</label><br/>
-                  <textarea name="experience" class="form-control" rows="6"></textarea>
+                  <textarea id="experience" name="experience" class="form-control" rows="6"></textarea>
                   <br/>
 
                   <label class="control-label">Skill</label><br/>
@@ -128,11 +128,11 @@
                 <h3><b>Add your own section</b></h3>
                 <div hidden id="section1" class="form-group">
                   <label class="control-label">Section Title</label><br/>
-                  <input id="sectionTitle1" name="sectionTitle1" class="form-control"/>
+                  <input id="sectionTitle1" name="title" class="form-control"/>
                   <br/>
 
                   <label class="control-label">content</label><br/>
-                  <textarea id="sectionContent1" name="sectionContent1" class="form-control" rows="6"></textarea>
+                  <textarea id="sectionContent1" name="content" class="form-control" rows="6"></textarea>
                   <br/>
 
                 </div>
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="form-group">
-                  <button name="submit" type="submit" class="btn btn-info btn-md">Publish</button>
+                  <button id="submit" name="submit" type="button" class="btn btn-info btn-md">Publish</button>
                 </div>
 
                 <input name="user_id" value="{{ request.user.id }}" class="hidden">
@@ -160,11 +160,9 @@
     </div>
     <!-- /#wrapper -->
 
-    <script>
-      var csrf_token = "{{ csrf_token }}"
-    </script>
     <!-- jQuery -->
     <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
