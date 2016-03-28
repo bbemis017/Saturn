@@ -18,8 +18,8 @@ def create_summary(request):
             summaries.save()
             return JsonResponse({"id": summaries.id, "content": summaries.content, 
                                 "template": template, "user": request.user})
-            else:
-                return HttpResponseRedirect("/Section/edit_summary")
+        else:
+            return HttpResponseRedirect("/Section/edit_summary")
     else:
         create_summary_err = True
         return render(request,"website/sites.html",locals())
