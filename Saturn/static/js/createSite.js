@@ -17,7 +17,7 @@ var domainApproved = false;
 var numMajors = 1;
 var numLanguages = 1;
 var numSkills = 1;
-var numSection = 0;
+var numSection = 1;
 
 //easier to manage
 var majors = [];
@@ -29,72 +29,127 @@ majors.push( $('#major1') );
 languages.push( $('#language1') );
 skills.push( $('#skill1') );
 
+
 /**
  * adds Section
  */
 function addSection(){
-  if( numSection == 0){
-    sections.push( $('#section1') );
-    sections[0].show();
-    numSection++;
-  }
-  else{
-    var newDiv = $('#section1').clone(true);//clone deep copy
-    var prevId = "#section" + numSection;
-    numSection++;
+  var containerDiv = $('#container_section1');
+  var dId = "dsection" + (numSection + 1);
+
+  var newDiv = containerDiv.clone();//clone deep copy
+  var prevId = "#section" + numSection;
+  numSection++;
 
 
-    //change id's and names
-    newDiv.attr("id","section"+numSection);
+  //change id's and names
+  newDiv.attr("id","container_section"+numSection);
 
-    var title = newDiv.find("#sectionTitle1");
-    var content = newDiv.find("#sectionContent1");
+  var title = newDiv.find("#sectionTitle1");
+  var content = newDiv.find("#sectionContent1");
 
-    title.attr("id","sectionTitle"+numSection);
-    title.attr("name","sectionTitle"+numSection);
+  title.attr("id","sectionTitle"+numSection);
+  title.attr("name","sectionTitle"+numSection);
+  title.val("");
 
-    content.attr("id","sectionContent"+numSection);
-    content.attr("name","sectionContent"+numSection);
+  content.attr("id","sectionContent"+numSection);
+  content.attr("name","sectionContent"+numSection);
+  content.val("");
 
-    $("#section"+(numSection - 1)).after(newDiv);
-    sections.push( $("section"+(numSection - 1)) );
-  }
+  var del = createDelete(dId);
+  var delDiv = newDiv.find("#sectionDel");
+  delDiv.append(del);
+
+  newDiv.show();
+
+  $("#section").append(newDiv);
+  sections.push( $("#container_section"+(numSection - 1)) );
+
+  $("#" + dId).click(function(){
+    var d = this.id.substr(1,this.id.length);
+    sections = sections.filter(function(el){
+      return el.id != d;
+    })
+    $("#container_" + d).remove();
+    $("#" + d).remove();
+    $("#" + this.id).remove();
+  });
+
 }
 
 /**
  * Adds text box for skills
  */
 function addSkill(){
-  var prevId = "#skill" + numSkills;
-  ++numSkills;
-  var id = "skill" + numSkills;
-  var textBox = createTextBox(id);
-  $(prevId).after(textBox);
-  skills.push( $("#skill" + numSkills));
+  numSkills = addBox("skill",skills,numSkills);
 }
 
 /**
  * Adds text box for language
  */
 function addLanguage(){
-  var prevId = "#language" + numLanguages;
-  ++numLanguages;
-  var id = "language" + numLanguages;
-  var textBox = createTextBox(id);
-  $(prevId).after(textBox);
-  languages.push(textBox);
+  numLanguages = addBox("language",languages,numLanguages);
 }
 
 /**
  * Adds text box for major
  */
 function addMajor(){
-  var prevId = "#major" + numMajors;
-  ++numMajors;
-  var id = "major" + numMajors;
-  var textBox = createTextBox(id);
-  $(prevId).after(textBox);
-  majors.push(textBox);
+  numMajors = addBox("major",majors,numMajors);
+}
+
+/**
+ * Adds additional text box and corresponding delete button
+ * @param string- id name to reference
+ * @param array- array of textbox elements
+ * @param counter- number of textboxes
+ * @return new value of counter
+ */
+function addBox(string,array,counter){
+  ++counter;
+
+  var div = $("#container_" + string + 1).clone();
+
+  var id = "container_" + string + counter;
+  div.attr("id", id);
+
+  var textBox = div.find("#" + string + "1");
+  textBox.attr('id',id);
+  textBox.val("");
+
+  array.push( textBox );
+
+  var dId = "d" + string + counter;
+
+  var del = createDelete(dId);
+  var delDiv = div.find("#" + string + "Del");
+  delDiv.append(del);
+
+  $("#" + string).append(div);
+
+  $("#" + dId).click(function(){
+    var d = this.id.substr(1,this.id.length);
+    array = array.filter(function(el){
+      return el.id != d;
+    })
+    $("#container_" + d).remove();
+    $("#" + d).remove();
+    $("#" + this.id).remove();
+  });
+
+  return counter;
+}
+
+/**
+ * Creates a delete button with id
+ */
+function createDelete(id){
+  var btn = document.createElement("button");
+  btn.setAttribute("id",id);
+  btn.setAttribute("type","button");
+  btn.setAttribute("class","btn btn-danger btn-sm");
+  btn.innerHTML = "Delete";
+  return btn;
 }
 
 /**
@@ -118,7 +173,7 @@ function getValues(elementArray){
   for(var i = 0; i < elementArray.length; i++){
     newArray.push( elementArray[i].val());
   }
-  
+
   return JSON.stringify(newArray);
 }
 
@@ -173,6 +228,7 @@ function submitResponse(json){
   }
   else if(json.error){
     $('html,body').animate({ scrollTop: 0},'fast');
+    //TODO: display error messages
   }
   else{
     console.log("undefined submitResponse");
@@ -196,7 +252,7 @@ function sendAjax(url,data, successCall){
  */
 function checkDomain(){
   var domain = $('#domain').val()
-  var data = {domain_check : '1', domain_json : domain};
+    var data = {domain_check : '1', domain_json : domain};
   sendAjax("/sites/createSite/",data,domainResponse);
 }
 

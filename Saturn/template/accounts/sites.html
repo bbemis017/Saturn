@@ -64,7 +64,7 @@
                               <h4 class="list-group-item-heading">{{ website.template.title }} </h4>
                                 <p class="list-group-item-text">First Name: John    Last Name: Smith    Birthday: 12/12/1991</p>
                                 <a class="list-group-item-text" href="#">Edit &raquo;</a>
-                                <form method="POST">
+                                <form method="POST" class="form-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="domain" value="{{ website.domain }}"/>
                                     <button name="deleteBtn" class="btn btn-success btn-sm" type="submit">Delete</button>
