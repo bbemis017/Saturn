@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def create_summary(request):
-    # TODO: Here read request.POST for necessary informations
     if not request.is_ajax():
         content = request.GET('content')
         template = request.GET('template')
@@ -28,4 +27,16 @@ def create_summary(request):
 @login_required
 def edit_summary(request):
     # TODO: edit
-    print request.POST
+    if request.is_ajax();
+        content = request.POST('content')
+        template = request.POST('template')
+        summary = Summary.objects.get(id=request.POST['summary_id'])
+        if summary.user == request.user:
+            #do edit operations
+            summary.content = request.POST['summary']
+            summary.save()
+            return render(request, "website/sites.html",locals())
+        else:
+            #return to somewhere else
+            return render(request, "website/sites.html",locals())
+    return render(request, "website/sites.html",locals())
