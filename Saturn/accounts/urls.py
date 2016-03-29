@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^reset_password/$', views.reset_password),
     url(r'^profile/$', views.profile),
     url(r'^sites/$', views.sites),
+    url(r'^signout/$', views.signout),
 ]

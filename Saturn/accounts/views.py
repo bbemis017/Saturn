@@ -259,3 +259,7 @@ def sites(request):
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())
+
+
+def signout(request):
+    return render(request, "accounts/signout.html", locals())
