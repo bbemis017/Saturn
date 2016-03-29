@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as django_login, authenticate
+from django.contrib.auth import logout as django_logout
 from ratelimit.decorators import ratelimit
 from django.forms.utils import ErrorList
 from accounts.models import Accounts
@@ -262,4 +263,5 @@ def sites(request):
 
 
 def signout(request):
+    django_logout(request)
     return render(request, "accounts/signout.html", locals())
