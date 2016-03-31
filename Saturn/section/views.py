@@ -27,7 +27,7 @@ def create_summary(request):
 @login_required
 def edit_summary(request):
     # TODO: edit
-    if request.is_ajax();
+    if request.is_ajax():
         content = request.POST('content')
         template = request.POST('template')
         summary = Summary.objects.get(id=request.POST['summary_id'])
