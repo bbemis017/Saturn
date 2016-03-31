@@ -2,7 +2,13 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1>{{ section.title }}</h1>
+                    {% if section.summary %}
+                    <h1>Summary</h1>
+                    {% elif section.experience %}
+                    <h1> Experience </h1>
+                    {% else %}
+                    <h1> Section </h1>
+                    {% endif %}
                     <p>{% block paragraph %}
                         Section Test
                       {% endblock %}

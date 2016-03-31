@@ -10,23 +10,14 @@ from section.constants import (
     SectionTypes
 )
 
+from time import time
+
 
 class Section(models.Model):
-    unique_name = models.SlugField(max_length=255, unique=True, 
-                                    blank=True, editable=False)
-    alias = models.SlugField(max_length=255, blank=True)
-    title = models.CharField(max_length=255, unique=True)
+    user = models.ForeignKey(User, null=True)
     classes = models.CharField(max_length=255, default='section')
     template = models.ForeignKey(Template)
     childType = models.IntegerField(default=SectionTypes.DEFAULT,blank=False)
-
-    def save(self, *args, **kwargs):
-        self.unique_name = slugify(self.title)
-        if self.alias:
-            self.alias = slugify(self.alias)
-        else:
-            self.alias = ''
-        super(Section, self).save(*args, **kwargs)
 
 
 def user_directory_path(instance, filename):
@@ -34,7 +25,6 @@ def user_directory_path(instance, filename):
 
 
 class Photo(Section):
-    author = models.ForeignKey(User, blank=True)
     photograph = models.FileField(upload_to=user_directory_path)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
@@ -49,26 +39,40 @@ class Photo(Section):
         return self.status == Status.PUBLIC 
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()
 
 
 class Summary(Section):
-    user = models.ForeignKey(User, blank=True)
     content = MarkdownField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()
 
+class Experience(Section):
+    content = MarkdownField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    company_name = models.CharField(max_length=256)
+    time = models.DateTimeField(auto_now_add=True)
+    skills = models.CharField(max_length=1024,blank=True)
+    languages = models.CharField(max_length=256, blank=True)
+
+
+    def __str__(self):
+        return '%s' % (self.id)
+
+    def __unicode__(self):
+        return u'%s' % self.__str__()
+        
+
 
 class Post(Section):
-    author = models.ForeignKey(User, blank=True)
     content = MarkdownField(blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
@@ -84,7 +88,7 @@ class Post(Section):
         return self.status == Status.PUBLIC 
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()

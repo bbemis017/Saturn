@@ -8,37 +8,36 @@ from section.models import (
 
 
 class SectionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'unique_name', )
+    list_display = ('id', 'user')
 
 
 class PostAdmin(admin.ModelAdmin):
-    exclude = ('author', )
-    list_display = ('id', 'title', 'status', 'created_at')
+    exclude = ('user', )
+    list_display = ('id', 'status', 'created_at')
     list_filter = ('status', )
     ordering = ('-created_at', )
-    search_fields = ('title', )
 
     def save_model(self, request, obj, form, change):
-        obj.author = request.user
+        obj.user = request.user
         obj.save()
 
 
 class SummaryAdmin(admin.ModelAdmin):
-    exclude = ('author', )
+    exclude = ('user', )
     list_display = ('id', 'created_at')
     ordering = ('-created_at', )
 
     def save_model(self, request, obj, form, change):
-        obj.author = request.user
+        obj.user = request.user
         obj.save()
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    exclude = ('author', )
-    list_display = ('id', 'title', 'status', 'created_at')
+    exclude = ('user', )
+    list_display = ('id', 'status', 'created_at')
 
     def save_model(self, request, obj, form, change):
-        obj.author = request.user
+        obj.user = request.user
         obj.save()
 
 
