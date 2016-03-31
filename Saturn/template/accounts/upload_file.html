@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Files</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "bootstrap-3.3.6/css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+    <link href="{% static "css/fileinput.css" %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static "css/font-awesome.css" %}" rel="stylesheet" type="text/css">
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/fileinput.js" %}"></script>
+
+
+
+
+
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        {% include 'accounts/sidebar.html' %}
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Files
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input id="input-705" name="image" type="file" multiple class="file-loading">
+				<script>
+					var $input = $("#input-705");
+					$input.fileinput({
+    						uploadUrl: '/accounts/upload_file', // The upload file function is not included, upload.php is just an example becuase i don't know where's the place we are going to store all the files. 
+    						uploadAsync: false,
+    						showUpload: false, // hide upload button
+    						showRemove: false, // hide remove button
+    						minFileCount: 1,
+    						maxFileCount: 5
+					}).on("filebatchselected", function(event, files) {
+    						// trigger upload method immediately after files are selected
+    						$input.fileinput("upload");
+					});
+				</script>
+                    </div>
+                </div>
+<!--
+<div class = "row">
+<div class = "col-lg-12" >
+	<form id="upload" enctype="multipart/form-data" method="post" name="fileinfo">
+		<input type="file" name="file">
+	</form>
+</div>
+</div>
+-->
+
+    <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}" type="text/javascript"></script>
+
+</body>
+
+</html>

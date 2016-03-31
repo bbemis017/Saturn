@@ -265,3 +265,12 @@ def sites(request):
 def signout(request):
     django_logout(request)
     return render(request, "accounts/signout.html", locals())
+
+@login_required
+def files(request):
+    return render(request, "accounts/file.html", locals())
+
+@login_required
+def upload(request):
+    return render(request, "accounts/upload_file.html", locals())
+
