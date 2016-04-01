@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^signout/$', views.signout),
     url(r'^files/$', views.files),
     url(r'^upload/$', views.upload),
+    url(r'^courseTemplate/$', views.courseTemplate),
 ]
