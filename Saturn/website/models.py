@@ -10,6 +10,8 @@ class Template(models.Model):
 
 class ResumeTemplate(Template):
     author = models.CharField(max_length=50)
+    '''I think the description should probably be moved to the website or
+    the Template class, at some point -Ben'''
     description = models.CharField(max_length=150,null=True)
 
 class Website(models.Model):

@@ -66,7 +66,7 @@ def createSite(request):
                      skills, languages, sections, majors
                   -Normal variables:
                     domain, title, author, description, name, education, gpa,
-                    experience
+                    experience, summary
                 '''
 
                #check if site exists

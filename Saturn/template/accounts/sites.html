@@ -62,7 +62,9 @@
                             {% for website in websites %}
                             <div class="list-group-item">
                               <h4 class="list-group-item-heading">{{ website.template.title }} </h4>
-                                <p class="list-group-item-text">First Name: John    Last Name: Smith    Birthday: 12/12/1991</p>
+                                <p class="list-group-item-text">Domain: http://52.71.144.214/website/{{ website.domain }} 
+                                  <br/><i>{{ website.template.resumetemplate.description }}</i>
+                                </p>
                                 <a class="list-group-item-text" href="#">Edit &raquo;</a>
                                 <form method="POST" class="form-inline">
                                     {% csrf_token %}

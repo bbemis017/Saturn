@@ -213,7 +213,7 @@ function submitForm(){
     title : $('#title').val(), author : $('#author').val(),
     description : $('#description').val(), name : $('#name').val(),
     education : $('#education').val(), gpa : $('#gpa').val(),
-    experience : $('#experience').val()};
+    experience : $('#experience').val(), summary : $('#summary').val() };
 
   sendAjax("/sites/createSite/",data,submitResponse);
 } 
