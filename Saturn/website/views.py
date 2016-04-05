@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 from website.models import Website
 from website.models import Template, ResumeTemplate
-from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, DeleteSiteForm
+from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseWebpageTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
 from section.constants import SectionTypes
@@ -87,7 +87,7 @@ def createSite(request):
                #check if site exists
                 if not Website.objects.filter(domain=domain).exists():
                     # creates a resume template by default
-                    template = ResumeTemplate.objects.create(title=title,description=description)
+                    template = ResumeTemplate.objects.create(title=title)
                     template.path = "website/resumeTemplate.html"
                     template.author = author
                     template.save()
