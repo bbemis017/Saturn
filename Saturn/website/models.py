@@ -14,6 +14,10 @@ class ResumeTemplate(Template):
     the Template class, at some point -Ben'''
     description = models.CharField(max_length=150,null=True)
 
+class CourseTemplate(Template):
+    author = models.CharField(max_length=50)
+    description = models.CharField(max_length=150,null=True)
+
 class Website(models.Model):
     user = models.ForeignKey(User)
     path = models.CharField(max_length=50,null=True)

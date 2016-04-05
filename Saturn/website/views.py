@@ -178,3 +178,7 @@ def createSite(request):
                 return JsonResponse(response_data)
 
     return render(request, "website/createSite.html",locals())
+
+@login_required
+def selectTemplate(request):
+    return render(request, "website/selectTemplate.html", locals())
