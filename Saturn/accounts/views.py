@@ -274,6 +274,4 @@ def files(request):
 def upload(request):
     return render(request, "accounts/upload_file.html", locals())
 
-def courseTemplate(request):
-    return render(request, "website/courseTemplate.html", locals())
 
