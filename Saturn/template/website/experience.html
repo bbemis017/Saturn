@@ -1,0 +1,15 @@
+{% extends 'website/section.html' %}
+{% load django_markdown django_markdown_static %}
+
+{% block paragraph %}
+  {{ section.experience.content|markdown }}
+  {% if section.experience.getSkills %}
+    <h3> Skills </h3>
+    <ul>
+    {% for skill in section.experience.getSkills %}
+      <li> {{ skill }} </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
+

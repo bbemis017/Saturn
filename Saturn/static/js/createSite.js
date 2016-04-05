@@ -49,11 +49,11 @@ function addSection(){
   var content = newDiv.find("#sectionContent1");
 
   title.attr("id","sectionTitle"+numSection);
-  title.attr("name","sectionTitle"+numSection);
+  //title.attr("name","sectionTitle"+numSection);
   title.val("");
 
   content.attr("id","sectionContent"+numSection);
-  content.attr("name","sectionContent"+numSection);
+  //content.attr("name","sectionContent"+numSection);
   content.val("");
 
   var del = createDelete(dId);
@@ -63,7 +63,7 @@ function addSection(){
   newDiv.show();
 
   $("#section").append(newDiv);
-  sections.push( $("#container_section"+(numSection - 1)) );
+  sections.push( $("#container_section"+(numSection)) );
 
   $("#" + dId).click(function(){
     var d = this.id.substr(1,this.id.length);
@@ -207,6 +207,7 @@ function submitForm(){
 
   var sectionVal = getSectionValues();
 
+
   //data to send to server, submit 1 signifies that this ajax is a form submission
   var data = { submit : '1' , skills : skillVal, languages : languageVal,
     majors : majorVal, sections : sectionVal, domain : $('#domain').val(), 
@@ -229,6 +230,19 @@ function submitResponse(json){
   else if(json.error){
     $('html,body').animate({ scrollTop: 0},'fast');
     //TODO: display error messages
+    if(json.domain_missing){
+      $('#domain_missing').show();
+    }
+    else{
+      $('#domain_missing').hide();
+    }
+    if( json.title_missing){
+      $('#title_missing').show();
+    }
+    else{
+      $('#title_missing').hide();
+    }
+    console.log(json);
   }
   else{
     console.log("undefined submitResponse");

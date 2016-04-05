@@ -17,7 +17,6 @@
 
     <!-- Custom CSS -->
     <link href="{% static "css/scrolling-nav.css"%}" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 
 
@@ -41,8 +40,15 @@
       {% elif section.post %}
         {% include 'website/post.html' %}
 
+      {% elif section.experience %}
+        {% include 'website/experience.html' %}
+
+      {% elif section.introduction %}
+        {% include 'website/introduction.html' %}
+
       {% else %}
         {% include 'website/section.html' %}
+
       {% endif %}
 
    {% endfor %}

@@ -56,12 +56,18 @@
                 <div id="domainExists" {% if not errorDomainExists %}hidden{% endif %} class="alert alert-md alert-danger" role="alert">
                   Domain: {{ domain }} already Exists. Please try another
                 </div>
+                <div id="domain_missing" hidden class="alert alert-md alert-danger" role="alert">
+                  Please Enter a domain
+                </div>
 
                 <br/><br/>
                 <h3><b>The Basics</b></h3>
                 <div class="form-group">
                   <label class="control-label">Enter title</label>
                   <input id="title" name="title" type="text" class="form-control" maxlength="50"/>
+                  <div id="title_missing" hidden class="alert alert-md alert-danger" role="alert">
+                    Please Enter a title for the page 
+                  </div>
                   <br/>
 
                   <label class="control-label">Author</label><br/>
@@ -88,7 +94,7 @@
                   <br/>
 
                   <label class="control-label">Education</label><br/>
-                  <input id="description" name="education" type="text" class="form-control"/>
+                  <input id="education" name="education" type="text" class="form-control" maxlength="255"/>
                   <br/>
 
                   <label class="control-label">Majors</label><br/>
@@ -110,7 +116,7 @@
                   </div>
 
                   <label class="control-label">Gpa</label><br/>
-                  <input id="gpa" name="gpa" type="text" class="form-control"/>
+                  <input id="gpa" name="gpa" type="text" class="form-control" maxlength="5"/>
                   <br/>
 
                   <label class="control-label">Languages</label><br/>
