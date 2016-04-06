@@ -18,6 +18,8 @@ def displaySite(request,domain):
     template = website.template
     if template.path == "website/resumeTemplate.html":
         template = template.resumetemplate
+    elif template.path == "website/courseTemplate.hrml":
+        template = template.coursetemplate
 
     sections = Section.objects.filter(template=template)
 
