@@ -49,11 +49,9 @@ function addSection(){
   var content = newDiv.find("#sectionContent1");
 
   title.attr("id","sectionTitle"+numSection);
-  //title.attr("name","sectionTitle"+numSection);
   title.val("");
 
   content.attr("id","sectionContent"+numSection);
-  //content.attr("name","sectionContent"+numSection);
   content.val("");
 
   var del = createDelete(dId);
@@ -63,13 +61,13 @@ function addSection(){
   newDiv.show();
 
   $("#section").append(newDiv);
-  sections.push( $("#container_section"+(numSection)) );
+  newDiv = $("#container_section" + (numSection) );
+  sections.push( newDiv );
 
   $("#" + dId).click(function(){
     var d = this.id.substr(1,this.id.length);
-    sections = sections.filter(function(el){
-      return el.id != d;
-    })
+    var index = sections.indexOf( newDiv );
+    sections.splice(index,1);
     $("#container_" + d).remove();
     $("#" + d).remove();
     $("#" + this.id).remove();
@@ -129,9 +127,8 @@ function addBox(string,array,counter){
 
   $("#" + dId).click(function(){
     var d = this.id.substr(1,this.id.length);
-    array = array.filter(function(el){
-      return el.id != d;
-    })
+    var index = array.indexOf( textBox );
+    array.splice(index,1);
     $("#container_" + d).remove();
     $("#" + d).remove();
     $("#" + this.id).remove();
