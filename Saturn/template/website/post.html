@@ -1,6 +1,7 @@
 {% extends 'website/section.html' %}
+{% load django_markdown django_markdown_static %}
 
 {% block paragraph %}
-  {{ section.post.content }}
+  {{ section.post.content|markdown }}
 {% endblock %}
 

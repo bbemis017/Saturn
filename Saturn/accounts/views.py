@@ -236,7 +236,7 @@ def sites(request):
         print "post"
         #create Site
         if 'createSite' in request.POST:
-            return HttpResponseRedirect("/sites/createSite")
+            return HttpResponseRedirect("/sites/selectTemplate")
         elif 'deleteBtn' in request.POST:
             print "deleteBtn"
             if deleteForm.is_valid():

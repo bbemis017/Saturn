@@ -1,0 +1,25 @@
+{% extends 'website/section.html' %}
+
+{% block paragraph %}
+  {% if section.introduction.education %}
+    <h3><b>Education</b></h3>
+    <h3> {{ section.introduction.education }} </h3>
+  {% endif %}
+  {% if section.introduction.getMajors %}
+    {% for major in section.introduction.getMajors %}
+      <h5> Major in {{ major }} </h5>
+    {% endfor %}
+  {% endif %}
+  {% if section.introduction.gpa %}
+    <h3><em>GPA: {{ section.introduction.gpa }} </em> </h3>
+  {% endif %}
+  {% if section.introduction.getLanguages %}
+    <h3><b>Languages</b></h3>
+    <ul>
+      {% for language in section.introduction.getLanguages %}
+        <li> {{ language }} </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
+

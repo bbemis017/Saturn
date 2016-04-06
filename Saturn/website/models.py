@@ -10,6 +10,17 @@ class Template(models.Model):
 
 class ResumeTemplate(Template):
     author = models.CharField(max_length=50)
+    '''I think the description should probably be moved to the website or
+    the Template class, at some point -Ben'''
+    #description = models.CharField(max_length=150,null=True)
+
+class CourseWebpageTemplate(Template):
+    author = models.CharField(max_length=50)
+
+
+
+class CourseTemplate(Template):
+    author = models.CharField(max_length=50)
     description = models.CharField(max_length=150,null=True)
 
 class Website(models.Model):
@@ -17,6 +28,7 @@ class Website(models.Model):
     path = models.CharField(max_length=50,null=True)
     domain = models.CharField(max_length=50)
     template = models.ForeignKey(Template, null=True)
+    description = models.CharField(max_length=150,null=True)
 
     created_at = models.DateTimeField(default=timezone.now)
 

@@ -10,23 +10,15 @@ from section.constants import (
     SectionTypes
 )
 
+from time import time
+import json
+
 
 class Section(models.Model):
-    unique_name = models.SlugField(max_length=255, unique=True, 
-                                    blank=True, editable=False)
-    alias = models.SlugField(max_length=255, blank=True)
-    title = models.CharField(max_length=255, unique=True)
+    user = models.ForeignKey(User, null=True)
     classes = models.CharField(max_length=255, default='section')
     template = models.ForeignKey(Template)
-    childType = models.IntegerField(default=SectionTypes.DEFAULT,blank=False)
-
-    def save(self, *args, **kwargs):
-        self.unique_name = slugify(self.title)
-        if self.alias:
-            self.alias = slugify(self.alias)
-        else:
-            self.alias = ''
-        super(Section, self).save(*args, **kwargs)
+    title = models.CharField(max_length=150, default='section')
 
 
 def user_directory_path(instance, filename):
@@ -34,7 +26,6 @@ def user_directory_path(instance, filename):
 
 
 class Photo(Section):
-    author = models.ForeignKey(User, blank=True)
     photograph = models.FileField(upload_to=user_directory_path)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
@@ -49,26 +40,94 @@ class Photo(Section):
         return self.status == Status.PUBLIC 
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()
 
 
 class Summary(Section):
-    user = models.ForeignKey(User, blank=True)
     content = MarkdownField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
+
+    def __unicode__(self):
+        return u'%s' % self.__str__()
+
+class Introduction(Section):
+    created_at = models.DateTimeField(auto_now_add=True)
+    education = models.CharField(max_length=255,blank=True)
+    majors = models.CharField(max_length=1024,blank=True)
+    languages = models.CharField(max_length=1024,blank=True)
+    gpa = models.CharField(max_length=5)
+
+    def setMajors(self, m):
+        self.majors = json.dumps(m)
+
+    '''returns python list of majors or returns false
+    if there are no majors'''
+    def getMajors(self):
+        m = '' 
+        try:
+            m = json.loads(self.majors)
+        except ValueError, e:
+            return False
+        #if there are no majors
+        if len(m) == 1 and m[0] == '':
+            return False
+        else:
+            return m
+
+    def setLanguages(self, m):
+        self.languages = json.dumps(m)
+
+    '''returns python list of languages or returns false if there are
+    no languages'''
+    def getLanguages(self):
+        l = ''
+        try:
+            l = json.loads(self.languages)
+        except ValueError, e:
+            return False
+        if len(l) == 1 and l[0] == '':
+            return False
+        else:
+            return l
+
+class Experience(Section):
+    content = MarkdownField(blank=True,null=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    skills = models.CharField(max_length=1024,blank=True)
+
+
+    def __str__(self):
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()
 
 
+    def setSkills(self, s):
+        self.skills = json.dumps(skills)
+
+    #returns python list of skills or returns false if there are no skills
+    def getSkills(self):
+        s = ''
+        try:
+            s = json.loads(self.skills)
+        except ValueError, e:
+            return False
+        #if there are no skills
+        if len(s) == 1 and s[0] == '':
+            return False
+        else:
+            return s
+        
+
+
 class Post(Section):
-    author = models.ForeignKey(User, blank=True)
     content = MarkdownField(blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
@@ -84,7 +143,7 @@ class Post(Section):
         return self.status == Status.PUBLIC 
 
     def __str__(self):
-        return '%s %s' % (self.id, self.title)
+        return '%s' % (self.id)
 
     def __unicode__(self):
         return u'%s' % self.__str__()

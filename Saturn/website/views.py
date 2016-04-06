@@ -3,10 +3,11 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 from website.models import Website
 from website.models import Template, ResumeTemplate
-from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, DeleteSiteForm
+from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseWebpageTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
-from section.models import Section, Post
+from section.models import Introduction, Summary, Section, Post, Experience
 from section.constants import SectionTypes
+
 import json
 
 
@@ -21,9 +22,29 @@ def displaySite(request,domain):
     elif template.path == "website/courseTemplate.hrml":
         template = template.coursetemplate
 
-    sections = Section.objects.filter(template=template)
+    sections = Section.objects.filter(template=template, user=website.user)
 
     return render(request,template.path,locals())
+
+def varExists(request,string):
+    if string in request.POST and request.POST.get(string) != '':
+        return True
+    else:
+        return False
+def arrayExists(request,string):
+    variable = ''
+    try:
+        variable = json.loads( request.POST.get(string) )
+    except ValueError, e:
+        return False
+    if len(variable) == 1 and variable[0] == '':
+        return False 
+    elif len(variable):
+        return True
+    else:
+        return False
+
+
 
 @login_required
 def createSite(request):
@@ -38,56 +59,116 @@ def createSite(request):
 
             if 'submit' in request.POST:
 
-               domain = request.POST.get('domain')
-               title = request.POST.get('title')
-               author = request.POST.get('author')
-               description = request.POST.get('description')
+                print request.POST
 
-               skills = json.loads( request.POST.get('skills') )
-               sections = json.loads( request.POST.get('sections') )
+                #check essentials
+                if not varExists(request,'domain'):
+                    response_data['domain_missing'] = 1
+                    response_data['error'] = 1
+                if not varExists(request,'title'):
+                    response_data['title_missing'] = 1
+                    response_data['error'] = 1
+                if 'error' in response_data:
+                    return JsonResponse(response_data)
 
-               '''there are variables for every field on the createSite page 
-               that are being sent through the ajax. Most variables can be 
-               accessed the way above but some variables contain a list and 
-               you must call json.loads to convert them into an array I left an
-               example of skills above. Sections are slightly different. It is
-               still an array but the even elements contain the section title
-               and the odd elements contain the section content, so there are
-               2 elements per section.If you are confused about that please ask.
-               List of variables:
-                 -Array variables:
-                    skills, languages, sections, majors
-                 -Normal variables:
-                   domain, title, author, description, name, education, gpa,
-                   experience
-               '''
+
+                domain = request.POST.get('domain')
+                title = request.POST.get('title')
+                author = request.POST.get('author')
+                description = request.POST.get('description')
+
+                sections = {} 
+
+                #check and assign variables
+                print request.POST
+                if arrayExists(request,'sections'):
+                    sections = json.loads(request.POST.get('sections') )
+                if varExists(request,'summary'):
+                    summary = request.POST.get('summary')
 
                #check if site exists
-               if not Website.objects.filter(domain=domain).exists():
-                   # creates a resume template by default
-                   template = ResumeTemplate.objects.create(title=title,description=description)
-                   template.path = "website/resumeTemplate.html"
-                   template.author = author
-                   template.save()
+                if not Website.objects.filter(domain=domain).exists():
+                    # creates a resume template by default
+                    template = ResumeTemplate.objects.create(title=title)
+                    template.path = "website/resumeTemplate.html"
+                    template.author = author
+                    template.save()
 
-                   #create Site
-                   website = Website.objects.create(user=request.user,template=template)
-                   website.domain = domain
-                   website.template = template
-                   website.save()
+                    if varExists(request,'summary'):
+                        summ = Post.objects.create(user=request.user,template=template)
+                        summ.title = "About Me"
+                        summ.content = summary
+                        summ.save()
                     
-                   response_data = {}
-                   response_data['redirect'] = "/accounts/sites";
-                   '''also keep in mind that if an ajax function calls this
-                   python function then we must return a json file. In this case
-                   I have the javascript pickup the redirect, and redirect the
-                   browser'''
-                   return JsonResponse(response_data);
-               else:
-                   #error
-                   errorDomainExists = True
-                   response_data['error'] = 1
-                   return JsonResponse(response_data);
+                    #introduction
+                    introduction = Introduction.objects.create(user=request.user,template=template)
+                    save = False
+                    if varExists(request,'name'):
+                        introduction.title = request.POST.get('name') 
+                        save = True
+                    if varExists(request,'education'):
+                        introduction.education = request.POST.get('education') 
+                        save = True
+                    if arrayExists(request,'majors'):
+                        introduction.majors = request.POST.get('majors') 
+                        save = True
+                    if arrayExists(request,'languages'):
+                        introduction.languages = request.POST.get('languages')
+                        save = True
+                    if varExists(request,'gpa'):
+                        introduction.gpa = request.POST.get('gpa')
+                        save = True
+                    if save:
+                        introduction.classes += " gray-bg"
+                        introduction.save()
+                    else:
+                        introduction.delete()
+
+
+                    #create experience section
+                    save = False
+                    exp = Experience.objects.create(user=request.user,template=template)
+                    if arrayExists(request,'skills'):
+                        exp.skills = request.POST.get('skills')
+                        save = True
+                    if varExists(request,'experience'):
+                        exp.content = request.POST.get('experience')
+                        save = True
+                    if save:
+                        exp.title = "Experience"
+                        exp.save()
+                    else:
+                        exp.delete()
+
+
+                    #create sections
+                    section = None 
+                    print sections
+                    for i in range(len(sections)):
+                        if i % 2 == 0:
+                            section = Post.objects.create(user=request.user, template=template)
+                            section.title = sections[i]
+                            if i % 4 == 0:
+                                section.classes += " gray-bg"
+                        else:
+                            section.content = sections[i]
+                            section.save()
+
+
+                    #create Site
+                    website = Website.objects.create(user=request.user,template=template)
+                    website.domain = domain
+                    website.template = template
+                    website.save()
+                    
+                    response_data = {}
+                    response_data['redirect'] = "/accounts/sites";
+                    return JsonResponse(response_data);
+                else:
+                    #error
+                    errorDomainExists = True
+                    response_data['error'] = 1
+                    return JsonResponse(response_data);
 
             #if client requests to check domain availability
             if 'domain_check' in request.POST:
@@ -99,3 +180,7 @@ def createSite(request):
                 return JsonResponse(response_data)
 
     return render(request, "website/createSite.html",locals())
+
+@login_required
+def selectTemplate(request):
+    return render(request, "website/selectTemplate.html", locals())
