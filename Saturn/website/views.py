@@ -53,7 +53,13 @@ def createSite(request):
 
     if request.method == "POST":
 
-        if request.is_ajax():
+        #determine the type of form to display
+        if 'resumeTemplate' in request.POST:
+            resumeTemplate = True
+        elif 'courseTemplate' in request.POST:
+            courseTemplate = True
+
+        elif request.is_ajax():
 
             response_data = {}
 
@@ -159,6 +165,7 @@ def createSite(request):
                     website = Website.objects.create(user=request.user,template=template)
                     website.domain = domain
                     website.template = template
+                    website.description = description
                     website.save()
                     
                     response_data = {}
@@ -178,9 +185,14 @@ def createSite(request):
                 else:
                     response_data['exists'] = 0
                 return JsonResponse(response_data)
+        else:
+            #if no template selected and not a ajax response
+            return HttpResponseRedirect("/sites/selectTemplate?error=1")
 
     return render(request, "website/createSite.html",locals())
 
 @login_required
 def selectTemplate(request):
+    if 'error' in request.GET:
+        template_error = True 
     return render(request, "website/selectTemplate.html", locals())

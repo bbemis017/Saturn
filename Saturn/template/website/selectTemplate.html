@@ -49,6 +49,9 @@
                         </h1>
                     </div>
                 </div>
+                {% if template_error %}
+                  <div class="alert alert-md alert-danger">Please Select a Template</div>
+                {% endif %}
                 <form class="form-group" action="/sites/createSite/" method="POST">
                   {% csrf_token %}
                   <button name="createResumeSite" type="submit" class="btn btn-success btn-md">Create Resume Site</button>

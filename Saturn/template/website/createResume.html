@@ -1,0 +1,119 @@
+
+
+<br/><br/>
+<h3><b>Summary</b></h3>
+<div class="form-group">
+  <label class="control-label">Write a brief summary about yourself</label><br/>
+  <textarea id="summary" class="form-control" rows="4"></textarea>
+</div>
+
+<!-- introduction -->
+<br/><br/>
+<h3><b>Introduction<b></h3>
+<div class="form-group">
+  <label class="control-label">Name</label><br/>
+  <input id="name" name="name" type="text" class="form-control" maxlength="255"/>
+  <br/>
+
+  <label class="control-label">Education</label><br/>
+  <input id="education" name="education" type="text" class="form-control" maxlength="255"/>
+  <br/>
+
+  <label class="control-label">Majors</label><br/>
+  <div id="major" class="row">
+    <div id="container_major1">
+      <div id="majorBox" class="col-xs-10">
+        <input id="major1" name="major1" type="text" class="form-control"/>
+      </div>
+      <div id="majorDel" class="col-xs-2">
+        <!-- will insert delete button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addMajor" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+  <label class="control-label">Gpa</label><br/>
+  <input id="gpa" name="gpa" type="text" class="form-control" maxlength="5"/>
+  <br/>
+
+  <label class="control-label">Languages</label><br/>
+  <div id="language" class="row">
+    <div id="container_language1">
+      <div id="languageBox" class="col-xs-10">
+        <input id="language1" type="text" class="form-control"/>
+      </div>
+      <div id="languageDel" class="col-xs-2">
+        <!-- will insert button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addLanguage" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+  <br/>
+</div>
+
+<!-- Experience -->
+<br/><br/>
+<h3><b>Experience</b></h3>
+<div class="form-group">
+  <label class="control-label">Work/Leadership Experience</label><br/>
+  <textarea id="experience" name="experience" class="form-control" rows="6"></textarea>
+  <br/>
+
+  <label class="control-label">Skill</label><br/>
+  <div id="skill" class="row">
+    <div id="container_skill1">
+      <div id="skillBox" class="col-xs-10">
+        <input id="skill1" type="text" class="form-control"/>
+      </div>
+      <div id="skillDel" class="col-xs-2">
+        <!-- will insert button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addSkill" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- add -->
+<br/><br/>
+<h3><b>Add your own section</b></h3>
+<div class="form group">
+  <div id="section" class="row">
+    <div hidden id="container_section1">
+      <div class="col-xs-10">
+        <label class="control-label">Section Title</label><br/>
+        <input id="sectionTitle1" name="title" class="form-control" maxlength="255"/>
+        <br/>
+
+        <label class="control-label">content</label><br/>
+        <textarea id="sectionContent1" name="content" class="form-control" rows="6"></textarea>
+        <br/>
+      </div>
+      <div id="sectionDel" class="col-xs-2 col-xs-offset-10">
+        <!-- inserted later by javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addSection" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+</div>
