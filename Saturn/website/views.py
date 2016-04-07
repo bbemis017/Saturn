@@ -90,22 +90,8 @@ def createSite(request):
 
                 #check if site exists
                 if not Website.objects.filter(domain=domain).exists():
-<<<<<<< HEAD
-=======
-                    # creates a resume template by default
-                    template = ResumeTemplate.objects.create(title=title)
-                    template.path = "website/resumeTemplate.html"
-                    template.author = author
-                    template.save()
-
-                    if varExists(request,'summary'):
-                        summ = Post.objects.create(user=request.user,template=template)
-                        summ.title = "About Me"
-                        summ.content = summary
-                        summ.save()
->>>>>>> origin/master
                     
-                    template = ResumeTemplate.objects.create(title=title, description=description)
+                    template = ResumeTemplate.objects.create(title=title)
                     introduction = Introduction.objects.create(user=request.user, template=template)
                     exp = Experience.objects.create(user=request.user, template=template)
                     create_resume_template(request, sections, template, introduction, exp)
@@ -140,7 +126,6 @@ def createSite(request):
 
     return render(request, "website/createSite.html",locals())
 
-<<<<<<< HEAD
 
 def create_resume_template(request, sections, template, introduction, exp):
     print "what is going on"
@@ -211,10 +196,6 @@ def create_resume_template(request, sections, template, introduction, exp):
 
 @login_required
 def selectTemplate(request):
-=======
-@login_required
-def selectTemplate(request):
     if 'error' in request.GET:
         template_error = True 
->>>>>>> origin/master
     return render(request, "website/selectTemplate.html", locals())
