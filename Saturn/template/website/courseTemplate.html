@@ -35,28 +35,18 @@
     <div class="container">
 
 	<div class="row">
-	    <h1> MATH25600 </h1>
+	    <h1>{{ template.title }}</h1>
 	</div>
 
         <div class="row">
 
    {% include 'website/course_sidebar.html' %}
-
-            <div class="col-md-9">
-
-                <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/800x300" alt="">
-                    <div class="caption-full">
-                        <h4 class="pull-right">2016-03-14</h4>
-                        <h4><a href="#">Homework1</a>
-                        </h4>
-                        <p>see attachment right <a target="_blank" href="http://bootsnipp.com">here</a>.</p>
-                        <p>Goal In this homework: you will be introduced to matrix, You should get familiar with matrix calculations.</p>
-                    </div>
-
-                </div>
-
-            </div>
+   {%for section in sections %}
+       {% if section.post %}
+          {% include 'website/post.html' %}
+       {% endif %}
+       
+   {% endfor %}
 
         </div>
 
