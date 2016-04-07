@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^profile/$', views.profile),
     url(r'^sites/$', views.sites),
     url(r'^signout/$', views.signout),
-    url(r'^files/$', views.files),
-    url(r'^upload/$', views.upload),
+    url(r'^files/view/$', views.view_files),
+    url(r'^files/upload/$', views.upload_file),
+    url(r'^files/(\d+)/delete/$', views.delete_file),
+    url(r'^files/(\d+)/edit/$', views.edit_file),
 ]

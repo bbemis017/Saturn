@@ -8,7 +8,9 @@ from django.contrib.auth import logout as django_logout
 from ratelimit.decorators import ratelimit
 from django.forms.utils import ErrorList
 from accounts.models import Accounts
+from section.models import File
 from website.models import Website
+from accounts.constants import ERRORCODE
 from accounts.forms import (
     SignupForm,
     SigninForm,
@@ -266,12 +268,54 @@ def signout(request):
     django_logout(request)
     return render(request, "accounts/signout.html", locals())
 
+
 @login_required
-def files(request):
+def view_files(request):
+    files = File.objects.filter(user=request.user)
     return render(request, "accounts/file.html", locals())
 
+
+@ratelimit(key='post:file', rate='10/m', block=True, method=['POST'])
 @login_required
-def upload(request):
-    return render(request, "accounts/upload_file.html", locals())
+def upload_file(request):
+    if request.is_ajax():
+        f = request.FILES['file']
+        file = File.objects.create(content=f, user=request.user)
+        ########################################################
+        #
+        # WARNING: WEAK FILE TYPE VALIDATION HERE. MAY CAUSE SECURITY PROBLEM. 
+        # I WOULD FIX IT LATER, BUT JUST LEAVE IT FOR NOW FOR TESTING VERSION
+        #
+        ########################################################
+        valid_preview_extentions = ['jpg', 'jpeg', 'png', 'gif']
+        if file.content.name.split('.')[-1] in valid_preview_extentions:
+            file.preview = True
+        file.title = ''.join(file.content.name.split('.')[:-1])
+        file.save()
+        return JsonResponse({
+            'success': True
+            })
+    return render(request, "accounts/upload_file.html")
 
 
+@login_required
+def delete_file(request, file_id):
+    file = File.objects.filter(id=file_id)
+    if len(file) == 0:
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_SUCH_FILE})
+    file = file[0]
+    if request.user.id != file.user.id:
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+    filename = file.get_filename()
+    file.delete()
+    return JsonResponse({'success': True, "file_id": file_id})
+
+########################################################
+#
+# TODO: PROVIDE EDIT FUNCTION FOR USER TO CHANGE THEIR FILE NICK TITLE
+# AS WELL AS FILE STATUS TO PUBLIC OR PRIVATE. WOULD DO LATER.
+#
+########################################################
+@login_required
+def edit_file(request, file_id):
+    return JsonResponse({'success': True, "file_id": file_id})

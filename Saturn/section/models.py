@@ -17,18 +17,19 @@ import json
 class Section(models.Model):
     user = models.ForeignKey(User, null=True)
     classes = models.CharField(max_length=255, default='section')
-    template = models.ForeignKey(Template)
+    template = models.ForeignKey(Template, null=True, blank=True)
     title = models.CharField(max_length=150, default='section')
 
 
 def user_directory_path(instance, filename):
-    return 'user/{0}/{1}'.format(instance.user.id, filename)
+    return 'static/user/{0}/{1}'.format(instance.user.id, filename)
 
 
-class Photo(Section):
-    photograph = models.FileField(upload_to=user_directory_path)
+class File(Section):
+    content = models.FileField(upload_to=user_directory_path)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
+    preview = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -38,6 +39,10 @@ class Photo(Section):
     @property 
     def is_public(self):
         return self.status == Status.PUBLIC 
+
+    # WEAK WAY
+    def get_filename(self):
+        return self.content.name.split('/')[-1]
 
     def __str__(self):
         return '%s' % (self.id)
@@ -131,7 +136,7 @@ class Post(Section):
     content = MarkdownField(blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, 
                                     default=Status.PUBLIC)
-    photos = models.ManyToManyField(Photo)
+    file = models.ManyToManyField(File)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property

@@ -60,21 +60,28 @@
                 </div>
                 <!-- /.row -->
 				<div class="col-lg-12">
-                        <div class="list-group">
+                        <div id="uploads" class="list-group">
+                            {% if not files %} 
+                            <div id="no-file" class="alert alert-danger alert-dismissible" role="alert">You don't currently have any file. <a href="../upload/" class="alert-link" id="resend-email">Click here</a> to upload.</div>
+                            {% else %}
+                            <div id="file-notify" class="alert alert-success alert-dismissible" role="alert">Please be aware that you can see all your files here, but only the public ones would be showed on your website.</div>
                             <a href="#" class="list-group-item active">
                                 <h2 class="list-group-item-heading">Files</h2>
                                 <p class="list-group-item-text">Here's all the files you've uploaded</p>
                             </a>
-                            <div class="list-group-item">
-                                <h4 class="list-group-item-heading">Saturn.png</h4>
-                                <p><img id="uploaded_image" src="{% static "images/saturn.png" %}"></p>
-                                <a class="list-group-item-text" href="#">Delete &raquo;</a>
+                            {% for file in files %}
+                            <div id="{{ file.id }}" class="list-group-item">
+                                <h4 class="list-group-item-heading">{{ file.get_filename }}</h4>
+                                {% if file.preview %}
+                                    <p><img id="uploaded_image" src="/{{ file.content.name}}"></p>
+                                {% else %}
+                                    <a class="btn btn-success" target="_blank" href="/{{ file.content.name}}"> View </a>
+                                {% endif %}
+                                <a class="btn btn-info" target="_blank" href="../{{ file.id }}/edit"> Manage </a>
+                                <button class="delete btn btn-danger" data-id="{{ file.id }}" > Delete </button>
                             </div>
-                            <div class="list-group-item">
-                                <h4 class="list-group-item-heading">Resume.doc</h4>
-                                <p class="list-group-item-text">Preview is unavaliable</p>
-                                <a class="list-group-item-text" href="#">Delete &raquo;</a>
-                            </div>
+                            {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
 
@@ -90,9 +97,27 @@
     <!-- /#wrapper -->
 
 
-
-    <script>
-        document.getElementById("files").className += "active";
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
+    <script language="javascript">
+        $("#files").addClass("active");
+        $(".delete").click(function() {
+            $.ajax({
+                url: "/accounts/files/" + $(this).data("id") + "/delete/",
+                type: "POST",
+                async: true,
+                dataType: 'json',
+                data: {
+                  'csrfmiddlewaretoken': $.cookie('csrftoken')
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#" + data["file_id"]).remove();
+                },
+                error: function(data) {
+                  console.log(data);
+                },
+            });
+        });
     </script>
 
 </body>

@@ -23,8 +23,8 @@
     <!-- Custom Fonts -->
     <link href="{% static "css/font-awesome.css" %}" rel="stylesheet" type="text/css">
     <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
     <script src="{% static "js/fileinput.js" %}"></script>
-
 
 
 
@@ -60,21 +60,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12">
-                        <input id="input-705" name="image" type="file" multiple class="file-loading">
+                    <div name="fileupload" class="col-lg-12">
+                        <form action method="post" enctype="multipart/form-data"  class="dropzone needsclick dz-clickable" drop-zone>
+                        {% csrf_token %}
+                        <div class="dz-message needsclick">
+                             <span class="lead">Drop files here or click to upload.</span>
+                        </div>
+                        </form>
 				<script>
-					var $input = $("#input-705");
-					$input.fileinput({
-    						uploadUrl: '/accounts/profile/', // The upload file function is not included, upload.php is just an example becuase i don't know where's the place we are going to store all the files. 
-    						uploadAsync: false,
-    						showUpload: false, // hide upload button
-    						showRemove: false, // hide remove button
-    						minFileCount: 1,
-    						maxFileCount: 5
-					}).on("filebatchselected", function(event, files) {
-    						// trigger upload method immediately after files are selected
-    						$input.fileinput("upload");
-					});
+					$(".dropzone").dropzone({ 
+                        url: "/accounts/files/upload/",
+                    });
 				</script>
                     </div>
                 </div>
