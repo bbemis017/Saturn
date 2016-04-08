@@ -12,6 +12,7 @@ class Create(object):
     @staticmethod
     def aboutSection(user, template, description):
         if description:
+            section.title = "About"
             section = Post.objects.create(user=user,template=template)
             section.content = description
             section.save()

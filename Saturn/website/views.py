@@ -78,7 +78,7 @@ def createSite(request):
                     response_data['error'] = 1
                 if 'error' in response_data:
                     return JsonResponse(response_data)
-                 
+
                 domain = request.POST.get('domain')
                 title = request.POST.get('title')
                 author = request.POST.get('author')
@@ -87,18 +87,19 @@ def createSite(request):
                 sections = {} 
 
                 #check and assign variables
-                if arrayExists(request,'sections'):
-                    sections = json.loads(request.POST.get('sections') )
-                if varExists(request,'summary'):
-                    summary = request.POST.get('summary')
+
 
                 #check if site exists
                 if not Website.objects.filter(domain=domain).exists():
-                    
-                    template = ResumeTemplate.objects.create(title=title)
-                    introduction = Introduction.objects.create(user=request.user, template=template)
-                    exp = Experience.objects.create(user=request.user, template=template)
-                    create_resume_template(request, sections, template, introduction, exp)
+
+                    template = None
+                    # will not work until js is updated
+                    if 'courseTemplateSelect' in request.POST: 
+                        template = create_course_template(request)
+                    if 'resumeTemplateSelect' in request.POST:
+                        template = create_resume_template(request)
+
+                    createSections(request,request.user,template)
 
                     #create Site
                     website = Website.objects.create(user=request.user,template=template)
@@ -106,7 +107,7 @@ def createSite(request):
                     website.template = template
                     website.description = description
                     website.save()
-                    
+
                     response_data = {}
                     response_data['redirect'] = "/accounts/sites";
                     return JsonResponse(response_data);
@@ -130,22 +131,53 @@ def createSite(request):
 
     return render(request, "website/createSite.html",locals())
 
+def create_course_template(request):
 
-def create_resume_template(request, sections, template, introduction, exp):
-    print "what is going on"
-    #template = ResumeTemplate.objects.create(title=request.POST.get('title'),description=request.POST.get('description'))
+    template = CourseTemplate.objects.create(title=request.POST.get('title'))
+    template.description = request.POST.get('description')
+    template.path = "website/courseTemplate.html"
+    template.author = request.POST.get('author')
+    template.save() 
+
+    aboutCourse = request.POST.get('aboutCourse')
+    about = Create.aboutSection(request.user,template,aboutCourse)
+
+    instructorList = request.POST.get('instructors')
+    instructors = Create.listSection(request.user,template,instructorList)
+
+    gradeList = request.POST.get('grades')
+    grades = Create.listSection(request.user,template,gradeList)
+
+    taList = request.POST.get('tas')
+    tas = Create.listSection(request.user,template,taList)
+
+    examList = request.POST.get('exams')
+    exams = Create.listSection(request.user,template,examList)
+
+    syllabus = request.POST.get('syllabus')
+    syllabusSection = Create.syllabusSection(request.user,template,syllabus)
+
+
+
+def create_resume_template(request):
+    if varExists(request,'summary'):
+        summary = request.POST.get('summary')
+
+    template = ResumeTemplate.objects.create(title=request.POST.get('title'))
+    template.description = request.POST.get('description')
     template.path = "website/resumeTemplate.html"
     template.author = request.POST.get('author')
     template.save()
+
 
     if varExists(request,'summary'):
         summ = Post.objects.create(user=request.user,template=template)
         summ.title = "About Me"
         summ.content = request.POST.get('summary')
         summ.save()
-                    
+
     #introduction
-   # introduction = Introduction.objects.create(user=request.user,template=template)
+    introduction = Introduction.objects.create(user=request.user,template=template)
     save = False
     if varExists(request,'name'):
         introduction.title = request.POST.get('name') 
@@ -171,7 +203,7 @@ def create_resume_template(request, sections, template, introduction, exp):
 
     #create experience section
     save = False
-   # exp = Experience.objects.create(user=request.user,template=template)
+    exp = Experience.objects.create(user=request.user,template=template)
     if arrayExists(request,'skills'):
         exp.skills = request.POST.get('skills')
         save = True
@@ -183,17 +215,29 @@ def create_resume_template(request, sections, template, introduction, exp):
         exp.save()
     else:
         exp.delete()
-                        
+
+    return template
+
+def createSections(request,user,template):
+    section = None
+
+    if arrayExists(request,'sections'):
+        sections = json.loads(request.POST.get('sections') )
+        print "sections exist"
+        print sections
+    else:
+        return False
 
     #create sections
-    section = None 
     for i in range(len(sections)):
         if i % 2 == 0:
-            section = Post.objects.create(user=request.user, template=template)
+            section = Post.objects.create(user=user,template=template)
             section.title = sections[i]
+            print "title"
             if i % 4 == 0:
                 section.classes += " gray-bg"
         else:
+            print "content save"
             section.content = sections[i]
             section.save()
 
