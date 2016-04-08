@@ -3,7 +3,7 @@ from section.models import (
     Section, 
     Summary,
     Post,
-    Photo
+    File
 )
 
 
@@ -32,7 +32,7 @@ class SummaryAdmin(admin.ModelAdmin):
         obj.save()
 
 
-class PhotoAdmin(admin.ModelAdmin):
+class FileAdmin(admin.ModelAdmin):
     exclude = ('user', )
     list_display = ('id', 'status', 'created_at')
 
@@ -44,4 +44,4 @@ class PhotoAdmin(admin.ModelAdmin):
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Summary, SummaryAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Photo, PhotoAdmin)
+admin.site.register(File, FileAdmin)

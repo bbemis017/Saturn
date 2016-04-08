@@ -82,6 +82,10 @@
                   {% include 'website/createResume.html' %}
                 {% endif %}
 
+                {% if courseTemplate %}
+                  {% include 'website/createCourseWebpage.html' %}
+                {% endif %}
+
 
                 <div class="form-group">
                   <button id="submit" name="submit" type="button" class="btn btn-info btn-md">Publish</button>

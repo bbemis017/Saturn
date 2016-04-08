@@ -1,0 +1,122 @@
+
+
+<!-- Course Infomation -->
+<br/><br/>
+<h3><b>Course Information</b></h3>
+
+<div class="form-group">
+  <label class="control-label">Write a brief summary about the course</label><br/>
+  <textarea id="aboutCourse" class="form-control" rows="4"></textarea>
+  <br/>
+
+  <label class="control-label">Instructors</label><br/>
+  <div id="instructor" class="row">
+    <div id="container_instructor1">
+      <div id="instructorBox" class="col-xs-10">
+        <input id="instructor1" name="instructor1" type="text" class="form-control"/>
+      </div>
+      <div id="instructorDel" class="col-xs-2">
+        <!-- will insert delete button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addInstructor" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+  <label class="control-label">TAs</label><br/>
+  <div id="ta" class="row">
+    <div id="container_ta1">
+      <div id="taBox" class="col-xs-10">
+        <input id="ta1" name="ta1" type="text" class="form-control"/>
+      </div>
+      <div id="taDel" class="col-xs-2">
+        <!-- will insert delete button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addTa" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+  <label class="control-label">Exams</label><br/>
+  <div id="exam" class="row">
+    <div id="container_exam1">
+      <div id="examBox" class="col-xs-10">
+        <input id="exam1" type="text" class="form-control"/>
+      </div>
+      <div id="examDel" class="col-xs-2">
+        <!-- will insert button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addExam" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+
+  <label class="control-label">Grade Distribution</label><br/>
+  <div id="grade" class="row">
+    <div id="container_grade1">
+      <div id="gradeBox" class="col-xs-10">
+        <input id="grade1" type="text" class="form-control"/>
+      </div>
+      <div id="gradeDel" class="col-xs-2">
+        <!-- will insert button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addGrade” type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+
+  <br/>
+</div>
+
+<!-- Syllabus -->
+<br/><br/>
+<h3><b>Syllabus</b></h3>
+<div class="form-group">
+  <label class="control-label">Write you syllabus here!</label><br/>
+  <textarea id="syllabus" name="syllabus" class="form-control" rows="6"></textarea>
+</div>
+
+<!-- add generic section -->
+<br/><br/>
+<h3><b>Add your own section</b></h3>
+<div class="form group">
+  <div id="section" class="row">
+    <div hidden id="container_section1">
+      <div class="col-xs-10">
+        <label class="control-label">Section Title</label><br/>
+        <input id="sectionTitle1" name="title" class="form-control" maxlength="255"/>
+        <br/>
+
+        <label class="control-label">content</label><br/>
+        <textarea id="sectionContent1" name="content" class="form-control" rows="6"></textarea>
+        <br/>
+      </div>
+      <div id="sectionDel" class="col-xs-2 col-xs-offset-10">
+        <!-- inserted later by javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addSection" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+</div>
