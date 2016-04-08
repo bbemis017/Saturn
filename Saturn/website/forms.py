@@ -1,6 +1,6 @@
 # coding: utf-8
 from django import forms
-from website.models import Website, Template, ResumeTemplate, CourseWebpageTemplate
+from website.models import Website, Template, ResumeTemplate, CourseTemplate 
 
 class CreateSiteForm(forms.ModelForm):
    class Meta:
@@ -22,7 +22,7 @@ class DeleteSiteForm(forms.ModelForm):
 		model = Website
 		fields = ('domain',)
 
-class CreateCourseWebpageTemplateForm(forms.ModelForm):
+class CreateCourseTemplateForm(forms.ModelForm):
   class Meta:
-    model = CourseWebpageTemplate
+    model = CourseTemplate
     fields = ('author',)

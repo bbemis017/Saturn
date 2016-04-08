@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 from website.models import Website
 from website.models import Template, ResumeTemplate, CourseTemplate
-from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseWebpageTemplateForm, DeleteSiteForm
+from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
 

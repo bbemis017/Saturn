@@ -1,9 +1,5 @@
 
-{% if template.coursetemplate %}
-    {% extends 'website/section.html' %}
-{% endif %}
 {% load django_markdown django_markdown_static %}
-{% block paragraph %}
-  {{ section.post.content|markdown }}
-{% endblock %}
+
+{{ section.post.content|markdown }}
 

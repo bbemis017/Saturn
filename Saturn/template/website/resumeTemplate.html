@@ -33,24 +33,7 @@
    {% include 'website/scrollingNavBar.html' %}
 
    {% for section in sections %}
-   
-      {% if section.summary %}
-        {% include 'website/summary.html' %}
-
-      {% elif section.post %}
-        {% include 'website/post.html' %}
-
-      {% elif section.experience %}
-        {% include 'website/experience.html' %}
-
-      {% elif section.introduction %}
-        {% include 'website/introduction.html' %}
-
-      {% else %}
         {% include 'website/section.html' %}
-
-      {% endif %}
-
    {% endfor %}
 
     <!-- jQuery -->

@@ -6,8 +6,7 @@ from uuslug import slugify
 from website.models import Template
 from section.constants import (
     Status,
-    STATUS_CHOICES,
-    SectionTypes
+    STATUS_CHOICES
 )
 
 from time import time
@@ -124,9 +123,25 @@ class Experience(Section):
             return False
         else:
             return s
+
+class List(Section):
+    items = models.CharField(max_length=2048,blank=True)
+
+    def setList(self, l):
+        self.items = json.dumps(items)
+
+    #returns python list of items or returns false if there is no list
+    def getArray(self):
+        a = ''
+        try:
+            a = json.loads(self.items)
+        except ValueError, e:
+            return False
+        if len(a) == 1 and a[0] == '':
+            return False
+        else:
+            return a 
         
-
-
 class Post(Section):
     content = MarkdownField(blank=True)
     status = models.IntegerField(choices=STATUS_CHOICES, 
