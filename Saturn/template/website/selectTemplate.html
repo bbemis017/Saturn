@@ -55,12 +55,12 @@
                 <form class="form-group" action="/sites/createSite/" method="POST">
                   {% csrf_token %}
                   <button name="createResumeSite" type="submit" class="btn btn-success btn-md">Create Resume Site</button>
-                  <input type="hidden" name="resumeTemplate" value="1"/>
+                  <input type="hidden" name="resumeTemplateSelect" value="1"/>
                 </form>
                 <form class="form-group" action="/sites/createSite/" method="POST">
                   {% csrf_token %}
                   <button name="createCourseSite" type="submit" class="btn btn-success btn-md">Create Course Site</button>
-                  <input type="hidden" name="courseTemplate" value="1"/>
+                  <input type="hidden" name="courseTemplateSelect" value="1"/>
                 </form>
                 <!-- /.row -->
 				            </div>

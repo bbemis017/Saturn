@@ -54,12 +54,12 @@ def createSite(request):
     account = Accounts.objects.get(user=request.user)
 
     if request.method == "POST":
-
+        print request.POST
         #determine the type of form to display
-        if 'resumeTemplate' in request.POST:
-            resumeTemplate = True
-        elif 'courseTemplate' in request.POST:
-            courseTemplate = True
+        if 'resumeTemplateSelect' in request.POST:
+            resumeTemplateSelect = True
+        elif 'courseTemplateSelect' in request.POST:
+            courseTemplateSelect = True
 
         elif request.is_ajax():
 
@@ -67,7 +67,7 @@ def createSite(request):
 
             if 'submit' in request.POST:
 
-                print request.POST
+                
 
                 #check essentials
                 if not varExists(request,'domain'):

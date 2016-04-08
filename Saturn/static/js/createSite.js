@@ -1,10 +1,12 @@
 $('#domain').on('input',replaceSpaces);
-
+$('#addSection').click(addSection);
 $('#domain').focusout(checkDomain);
 
 //variables
 var csrf_token = $.cookie('csrftoken');
 var domainApproved = false;
+var numSection = 1;
+var sections = [];
 
 /**
  * Adds additional text box and corresponding delete button
@@ -110,6 +112,7 @@ function submit(url,data,successCall){
   data['title'] = $('#title').val();
   data['author'] = $('#author').val();
   data['description'] = $('#description').val();
+  data['sections'] = getSectionValues();
   sendAjax(url,data,successCall);
 }
 
@@ -181,6 +184,7 @@ function submitResponse(json){
   }
   else{
     console.log("undefined submitResponse");
+    console.log(json);
   }
 }
 
@@ -191,4 +195,65 @@ function replaceSpaces(){
   var domain = $('#domain').val();
   domain = domain.replace(" ","_");
   $('#domain').val(domain);
+}
+
+/**
+ * adds Section
+ */
+function addSection(){
+  var containerDiv = $('#container_section1');
+  var dId = "dsection" + (numSection + 1);
+
+  var newDiv = containerDiv.clone();//clone deep copy
+  var prevId = "#section" + numSection;
+  numSection++;
+
+
+  //change id's and names
+  newDiv.attr("id","container_section"+numSection);
+
+  var title = newDiv.find("#sectionTitle1");
+  var content = newDiv.find("#sectionContent1");
+
+  title.attr("id","sectionTitle"+numSection);
+  title.val("");
+
+  content.attr("id","sectionContent"+numSection);
+  content.val("");
+
+  var del = createDelete(dId);
+  var delDiv = newDiv.find("#sectionDel");
+  delDiv.append(del);
+
+  newDiv.show();
+
+  $("#section").append(newDiv);
+  newDiv = $("#container_section" + (numSection) );
+  sections.push( newDiv );
+
+  $("#" + dId).click(function(){
+    var d = this.id.substr(1,this.id.length);
+    var index = sections.indexOf( newDiv );
+    sections.splice(index,1);
+    $("#container_" + d).remove();
+    $("#" + d).remove();
+    $("#" + this.id).remove();
+  });
+
+}
+
+/**
+ * Stringify the Section into an array
+ *   -even elements are the section title
+ *   -odd elements are the content
+ */
+function getSectionValues(){
+  var newArray = [];
+  for(var i = 0; i < sections.length; i++){
+    var title = sections[i].find("[name='title']");
+    var content = sections[i].find("[name='content']");
+    newArray.push( title.val() );
+    newArray.push( content.val() );
+  }
+  return JSON.stringify(newArray);
 }

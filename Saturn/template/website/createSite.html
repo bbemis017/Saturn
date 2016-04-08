@@ -78,13 +78,41 @@
                   <textarea id="description" name="description" class="form-control" rows="2" maxlength="150"></textarea>
                 </div>
 
-                {% if resumeTemplate %}
+                {% if resumeTemplateSelect %}
                   {% include 'website/createResume.html' %}
                 {% endif %}
 
-                {% if courseTemplate %}
+                {% if courseTemplateSelect %}
                   {% include 'website/createCourseWebpage.html' %}
                 {% endif %}
+
+                <!-- add -->
+                <br/><br/>
+                <h3><b>Add your own section</b></h3>
+                <div class="form group">
+                  <div id="section" class="row">
+                    <div hidden id="container_section1">
+                      <div class="col-xs-10">
+                      <label class="control-label">Section Title</label><br/>
+                      <input id="sectionTitle1" name="title" class="form-control" maxlength="255"/>
+                      <br/>
+
+                      <label class="control-label">content</label><br/>
+                      <textarea id="sectionContent1" name="content" class="form-control" rows="6"></textarea>
+                      <br/>
+                      </div>
+                      <div id="sectionDel" class="col-xs-2 col-xs-offset-10">
+                      <!-- inserted later by javascript -->
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-xs-2 col-xs-offset-10">
+                      <button id="addSection" type="button" class="btn btn-primary btn-sm">Add</button>
+                    </div>
+                  </div>
+                </div>
 
 
                 <div class="form-group">
@@ -115,8 +143,11 @@
 
     <!-- custom javascript -->
     <script src="{% static "js/createSite.js" %}"></script>
-    {% if resumeTemplate %}
+    {% if resumeTemplateSelect %}
       <script src="{% static "js/createResume.js" %}"></script>
+    {% endif %}
+    {% if courseTemplateSelect %}
+      <script src="{% static "js/createCourseWebpage.js" %}"></script>
     {% endif %}
 
   </body>
