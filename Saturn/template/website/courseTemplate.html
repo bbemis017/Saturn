@@ -32,14 +32,14 @@
       </div>
 
       <div class="row">
-
+      <div class="col-md-3">
         {% include 'website/course_sidebar.html' %}
-
-
+      </div>
+      <div class="col-md-9">
         {%for section in sections %}
           {% include 'website/course_section.html' %}
         {% endfor %}
-
+      </div>
       </div>
 
     </div>
