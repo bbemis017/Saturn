@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,45 +20,27 @@
 
     <link href="{% static "css/shop-item.css" %}" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  </head>
 
-</head>
-
-<body>
+  <body>
 
     <!-- Page Content -->
     <div class="container">
 
-	<div class="row">
-	    <h1> MATH25600 </h1>
-	</div>
+      <div class="row">
+        <h1>{{ template.title }}</h1>
+      </div>
 
-        <div class="row">
+      <div class="row">
 
-   {% include 'website/course_sidebar.html' %}
+        {% include 'website/course_sidebar.html' %}
 
-            <div class="col-md-9">
 
-                <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/800x300" alt="">
-                    <div class="caption-full">
-                        <h4 class="pull-right">2016-03-14</h4>
-                        <h4><a href="#">Homework1</a>
-                        </h4>
-                        <p>see attachment right <a target="_blank" href="http://bootsnipp.com">here</a>.</p>
-                        <p>Goal In this homework: you will be introduced to matrix, You should get familiar with matrix calculations.</p>
-                    </div>
+        {%for section in sections %}
+          {% include 'website/course_section.html' %}
+        {% endfor %}
 
-                </div>
-
-            </div>
-
-        </div>
+      </div>
 
     </div>
 
@@ -66,16 +48,16 @@
 
     <div class="container">
 
-        <hr>
+      <hr>
 
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
-                </div>
-            </div>
-        </footer>
+      <!-- Footer -->
+      <footer>
+        <div class="row">
+          <div class="col-lg-12">
+            <p>Copyright &copy; {{ template.title }} {% now "Y" %}</p>
+          </div>
+        </div>
+      </footer>
 
     </div>
     <!-- /.container -->
@@ -91,6 +73,6 @@
     <script src="{% static "js/jquery.easing.min.js" %}"></script>
     <script src="{% static "js/scrolling-nav.js" %}"></script>
 
-</body>
+  </body>
 
 </html>

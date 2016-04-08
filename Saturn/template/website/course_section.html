@@ -1,0 +1,14 @@
+<div class="col-md-9">
+  <div id="{{ section.id }}" class="{{ section.classes }}">
+    <div class="thumbnail">
+      <div class="caption-full">
+        <!-- we do not have a date for the section -->
+        <!-- <h4 class="pull-right">2016-03-14</h4> -->
+        <h4><font color="blue">{{ section.title }}</font></h4>
+        {% if section.post %}
+          {% include 'website/post.html' %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

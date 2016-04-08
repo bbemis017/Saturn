@@ -3,12 +3,15 @@
             <div class="row">
                 <div class="col-lg-12">
                   <h1>{{ section.title }}</h1>
-                    {% block paragraph %}
-                    <p>
-                      section without child
-                    </p>
-                    {% endblock %}
-                    <!-- <a class="btn btn-default page-scroll" href="#about">Return to top</a> -->
+                  {% if section.post %}
+                    {% include 'website/post.html' %}
+                  {% elif section.experience %}
+                    {% include 'website/experience.html' %}
+                  {% elif section.summary %}
+                    {% include 'website/summary.html' %}
+                  {% elif section.introduction %}
+                    {% include 'website/introduction.html' %}
+                  {% endif %}
                 </div>
             </div>
         </div>

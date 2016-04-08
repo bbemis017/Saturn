@@ -2,11 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 from website.models import Website
-from website.models import Template, ResumeTemplate
-from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseWebpageTemplateForm, DeleteSiteForm
+from website.models import Template, ResumeTemplate, CourseTemplate
+from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
-from section.constants import SectionTypes
+
 
 import json
 
@@ -19,10 +19,14 @@ def displaySite(request,domain):
     template = website.template
     if template.path == "website/resumeTemplate.html":
         template = template.resumetemplate
-    elif template.path == "website/courseTemplate.hrml":
+    elif template.path == "website/courseTemplate.html":
         template = template.coursetemplate
+    print template
 
     sections = Section.objects.filter(template=template, user=website.user)
+    for section in sections:
+        print section.title
+
 
     return render(request,template.path,locals())
 
