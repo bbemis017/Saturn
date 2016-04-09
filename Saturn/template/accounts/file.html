@@ -72,7 +72,7 @@
                             {% for file in files %}
                             <div id="{{ file.id }}" style="height:100%" class="box list-group-item dropdown">
                                 <div class="lead">
-                                <h4 class="list-group-item-heading"><a target="_blank" href="/{{ file.content.name }}">{{ file.get_filename }}</a>
+                                <h4 class="list-group-item-heading"><a target="_blank" href="/static/uploads/{{ file.content.name }}">{{ file.get_filename }}</a>
                                 <div class="dropdown pull-right">
                                     {% if file.is_public %}
                                     <button class="btn btn-success dropdown-toggle" type="button" id="status{{ file.id }}" data-toggle="dropdown">Public<span class="caret"></span></button>
@@ -88,7 +88,7 @@
                                   </div>
                                 </h4>
                                 {% if file.preview %}
-                                <p class="list-group-item-text"><img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="/{{ file.content.name}}" data-holder-rendered="true"></p>
+                                <p class="list-group-item-text"><img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="/static/uploads/{{ file.content.name}}" data-holder-rendered="true"></p>
                                 {% endif %}
                                 </div>
                             </div>
