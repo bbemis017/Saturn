@@ -70,15 +70,27 @@
                                 <p class="list-group-item-text">Here's all the files you've uploaded</p>
                             </a>
                             {% for file in files %}
-                            <div id="{{ file.id }}" class="list-group-item">
-                                <h4 class="list-group-item-heading">{{ file.get_filename }}</h4>
+                            <div id="{{ file.id }}" style="height:100%" class="box list-group-item dropdown">
+                                <div class="lead">
+                                <h4 class="list-group-item-heading"><a target="_blank" href="/{{ file.content.name }}">{{ file.get_filename }}</a>
+                                <div class="dropdown pull-right">
+                                    {% if file.is_public %}
+                                    <button class="btn btn-success dropdown-toggle" type="button" id="status{{ file.id }}" data-toggle="dropdown">Public<span class="caret"></span></button>
+                                    {% elif file.is_private %}
+                                    <button class="btn btn-danger dropdown-toggle" type="button" id="status{{ file.id }}" data-toggle="dropdown">Private<span class="caret"></span></button>
+                                    {% endif %}
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-id="{{ file.id }}" data-action="1" class="status">Set Public</a></li>
+                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-id="{{ file.id }}" data-action="2" class="status">Set Private</a></li>
+                                      <li role="presentation" class="divider"></li>
+                                      <li role="presentation"><a role="menuitem" tabindex="-1" data-id="{{ file.id }}" class="delete">Delete</a></li>
+                                    </ul>
+                                  </div>
+                                </h4>
                                 {% if file.preview %}
-                                    <p><img id="uploaded_image" src="/{{ file.content.name}}"></p>
-                                {% else %}
-                                    <a class="btn btn-success" target="_blank" href="/{{ file.content.name}}"> View </a>
+                                <p class="list-group-item-text"><img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" style="width: 200px; height: 200px;" src="/{{ file.content.name}}" data-holder-rendered="true"></p>
                                 {% endif %}
-                                <a class="btn btn-info" target="_blank" href="../{{ file.id }}/edit"> Manage </a>
-                                <button class="delete btn btn-danger" data-id="{{ file.id }}" > Delete </button>
+                                </div>
                             </div>
                             {% endfor %}
                             {% endif %}
@@ -100,6 +112,37 @@
     <script src="{% static "js/jquery.cookie.js" %}"></script>
     <script language="javascript">
         $("#files").addClass("active");
+        function flipStatus(data) {
+            console.log(data);
+            if (data['status'] == 1) {
+                $("#status" + data['file_id']).addClass("btn-success").removeClass("btn-danger");
+                $("#status" + data['file_id']).html("Public");
+            } else if (data['status'] == 2){
+                $("#status" + data['file_id']).removeClass("btn-success").addClass("btn-danger");
+                $("#status" + data['file_id']).html("Private");
+            }
+        }
+
+        $(".status").click(function() {
+            $.ajax({
+                url: "/accounts/files/" + $(this).data("id") + "/status/",
+                type: "POST",
+                async: true,
+                dataType: 'json',
+                data: {
+                  'action'             : $(this).data("action"),
+                  'csrfmiddlewaretoken': $.cookie('csrftoken')
+                },
+                success: function (data) {
+                    console.log(data);
+                    flipStatus(data);
+                },
+                error: function(data) {
+                    console.log(data);
+                },
+            });
+        })
+
         $(".delete").click(function() {
             $.ajax({
                 url: "/accounts/files/" + $(this).data("id") + "/delete/",
