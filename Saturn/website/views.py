@@ -186,10 +186,11 @@ def create_resume_template(request):
     if varExists(request,'education'):
         introduction.education = request.POST.get('education') 
         save = True
-    if Create.arrayExists('majors'):
+    if Create.arrayExists(request.POST.get('majors')):
         introduction.majors = request.POST.get('majors') 
+        print "save majors"
         save = True
-    if Create.arrayExists('languages'):
+    if Create.arrayExists(request.POST.get('languages')):
         introduction.languages = request.POST.get('languages')
         save = True
     if varExists(request,'gpa'):
@@ -205,7 +206,7 @@ def create_resume_template(request):
     #create experience section
     save = False
     exp = Experience.objects.create(user=request.user,template=template)
-    if Create.arrayExists('skills'):
+    if Create.arrayExists(request.POST.get('skills')):
         exp.skills = request.POST.get('skills')
         save = True
     if varExists(request,'experience'):
@@ -222,7 +223,7 @@ def create_resume_template(request):
 def createSections(request,user,template):
     section = None
 
-    if Create.arrayExists('sections'):
+    if Create.arrayExists(request.POST.get('sections')):
         sections = json.loads(request.POST.get('sections') )
         print "sections exist"
         print sections
