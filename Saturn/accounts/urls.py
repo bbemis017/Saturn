@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^files/view/$', views.view_files),
     url(r'^files/upload/$', views.upload_file),
     url(r'^files/(\d+)/delete/$', views.delete_file),
-    url(r'^files/(\d+)/edit/$', views.edit_file),
+    url(r'^files/(\d+)/status/$', views.edit_file),
 ]

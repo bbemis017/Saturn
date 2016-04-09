@@ -306,7 +306,6 @@ def delete_file(request, file_id):
     file = file[0]
     if request.user.id != file.user.id:
         return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
-    filename = file.get_filename()
     file.delete()
     return JsonResponse({'success': True, "file_id": file_id})
 
@@ -318,4 +317,12 @@ def delete_file(request, file_id):
 ########################################################
 @login_required
 def edit_file(request, file_id):
-    return JsonResponse({'success': True, "file_id": file_id})
+    file = File.objects.filter(id=file_id)
+    if len(file) == 0:
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_SUCH_FILE})
+    file = file[0]
+    if request.user.id != file.user.id:
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+    file.status = int(request.POST['action'])
+    file.save()
+    return JsonResponse({'success': True, "file_id": file_id, 'file_status': file.status})
