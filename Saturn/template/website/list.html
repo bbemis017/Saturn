@@ -1,0 +1,7 @@
+{% if section.list.getArray %}
+<ul>
+  {% for item in section.list.getArray %}
+    <li> {{ item }} </li>
+  {% endfor %}
+</ul>
+{% endif %}

@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from django.http import JsonResponse
 from website.models import Website
-from website.models import Template, ResumeTemplate, CourseTemplate
+from website.models import Template, ResumeTemplate, CourseTemplate, PageLinks
 from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
+from website.create import Create
 
 
 import json
@@ -21,29 +22,15 @@ def displaySite(request,domain):
         template = template.resumetemplate
     elif template.path == "website/courseTemplate.html":
         template = template.coursetemplate
-    print template
+        links = PageLinks.objects.filter(fromSite=website)
+
 
     sections = Section.objects.filter(template=template, user=website.user)
-    for section in sections:
-        print section.title
-
 
     return render(request,template.path,locals())
 
 def varExists(request,string):
     if string in request.POST and request.POST.get(string) != '':
-        return True
-    else:
-        return False
-def arrayExists(request,string):
-    variable = ''
-    try:
-        variable = json.loads( request.POST.get(string) )
-    except ValueError, e:
-        return False
-    if len(variable) == 1 and variable[0] == '':
-        return False 
-    elif len(variable):
         return True
     else:
         return False
@@ -60,6 +47,7 @@ def createSite(request):
             resumeTemplateSelect = True
         elif 'courseTemplateSelect' in request.POST:
             courseTemplateSelect = True
+            sites = Website.objects.filter(user=request.user)
 
         elif request.is_ajax():
 
@@ -94,10 +82,12 @@ def createSite(request):
 
                     template = None
                     # will not work until js is updated
-                    if 'courseTemplateSelect' in request.POST: 
+                    if 'courseTemplate' in request.POST: 
                         template = create_course_template(request)
-                    if 'resumeTemplateSelect' in request.POST:
+                        print "course"
+                    elif 'resumeTemplate' in request.POST:
                         template = create_resume_template(request)
+                        print "resume"
 
                     createSections(request,request.user,template)
 
@@ -107,6 +97,10 @@ def createSite(request):
                     website.template = template
                     website.description = description
                     website.save()
+
+                    if 'link_domains' in request.POST:
+                        links = request.POST.get('link_domains')
+                        Create.pageLinks(request.user,template,website,links)
 
                     response_data = {}
                     response_data['redirect'] = "/accounts/sites";
@@ -133,7 +127,8 @@ def createSite(request):
 
 def create_course_template(request):
 
-    template = CourseTemplate.objects.create(title=request.POST.get('title'))
+    template = CourseTemplate.objects.create()
+    template.title = request.POST.get('title')
     template.description = request.POST.get('description')
     template.path = "website/courseTemplate.html"
     template.author = request.POST.get('author')
@@ -143,19 +138,25 @@ def create_course_template(request):
     about = Create.aboutSection(request.user,template,aboutCourse)
 
     instructorList = request.POST.get('instructors')
-    instructors = Create.listSection(request.user,template,instructorList)
+    if Create.arrayExists(instructorList):
+        instructors = Create.listSection(request.user,template,"Instructors",instructorList)
 
     gradeList = request.POST.get('grades')
-    grades = Create.listSection(request.user,template,gradeList)
+    if Create.arrayExists(gradeList):
+        grades = Create.listSection(request.user,template,"Grades",gradeList)
 
     taList = request.POST.get('tas')
-    tas = Create.listSection(request.user,template,taList)
+    if Create.arrayExists(taList):
+        tas = Create.listSection(request.user,template,"TA's",taList)
 
     examList = request.POST.get('exams')
-    exams = Create.listSection(request.user,template,examList)
+    if Create.arrayExists(examList):
+        exams = Create.listSection(request.user,template,"Exams",examList)
 
     syllabus = request.POST.get('syllabus')
     syllabusSection = Create.syllabusSection(request.user,template,syllabus)
+
+    return template
 
 
 
@@ -185,10 +186,10 @@ def create_resume_template(request):
     if varExists(request,'education'):
         introduction.education = request.POST.get('education') 
         save = True
-    if arrayExists(request,'majors'):
+    if Create.arrayExists('majors'):
         introduction.majors = request.POST.get('majors') 
         save = True
-    if arrayExists(request,'languages'):
+    if Create.arrayExists('languages'):
         introduction.languages = request.POST.get('languages')
         save = True
     if varExists(request,'gpa'):
@@ -204,7 +205,7 @@ def create_resume_template(request):
     #create experience section
     save = False
     exp = Experience.objects.create(user=request.user,template=template)
-    if arrayExists(request,'skills'):
+    if Create.arrayExists('skills'):
         exp.skills = request.POST.get('skills')
         save = True
     if varExists(request,'experience'):
@@ -221,7 +222,7 @@ def create_resume_template(request):
 def createSections(request,user,template):
     section = None
 
-    if arrayExists(request,'sections'):
+    if Create.arrayExists('sections'):
         sections = json.loads(request.POST.get('sections') )
         print "sections exist"
         print sections

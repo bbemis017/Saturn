@@ -24,3 +24,6 @@ class Website(models.Model):
 
     created_at = models.DateTimeField(default=timezone.now)
 
+class PageLinks(models.Model):
+    fromSite = models.ForeignKey(Website, null=False, related_name='from_site')
+    toSite = models.ForeignKey(Website, null=False, related_name='to_site')

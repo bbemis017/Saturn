@@ -1,4 +1,30 @@
 
+<br/><br/>
+<h3><b>Add link to another page</b></h3>
+
+<div class="form-group">
+  <div id="link" class="row">
+    <div id="container_link1">
+      <div id="linkBox" class="col-xs-10">
+        <select id="link1" class="form-control">
+          <option value="select">Select</option>
+          {% for site in sites %}
+            <option value="{{ site.domain }}">{{ site.template.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div id="linkDel" class="col-xs-2">
+        <!-- will insert delete button with javascript -->
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-2 col-xs-offset-10">
+      <button id="addLink" type="button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+  </div>
+</div>
 
 <!-- Course Infomation -->
 <br/><br/>

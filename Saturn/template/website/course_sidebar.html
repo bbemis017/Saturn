@@ -2,8 +2,9 @@
 
     <p class="lead">Menu</p>
     <div class="list-group">
-        <a href="#" class="list-group-item active">Homework</a>
-        <a href="#" class="list-group-item">Lecture notes</a>
-        <a href="#" class="list-group-item">Schedule</a>
+      <a href="#" class="list-group-item active">{{ template.title }}</a>
+      {% for link in links %}
+        <a href="/website/{{ link.toSite.domain }}" class="list-group-item">{{ link.toSite.template.title }}</a>
+      {% endfor %}
     </div>
 

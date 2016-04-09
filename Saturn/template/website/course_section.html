@@ -7,6 +7,8 @@
         <h4><font color="#337ab7">{{ section.title }}</font></h4>
         {% if section.post %}
           {% include 'website/post.html' %}
+        {% elif section.list %}
+          {% include 'website/list.html' %}
         {% endif %}
       </div>
     </div>

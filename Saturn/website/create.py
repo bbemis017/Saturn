@@ -3,6 +3,10 @@ from section.models import(
         Post,
         List
         )
+from website.models import(
+        PageLinks,
+        Website
+        )
 
 import json
 
@@ -12,8 +16,8 @@ class Create(object):
     @staticmethod
     def aboutSection(user, template, description):
         if description:
-            section.title = "About"
             section = Post.objects.create(user=user,template=template)
+            section.title = "About"
             section.content = description
             section.save()
             return section
@@ -48,20 +52,30 @@ class Create(object):
         else:
             return False
 
+    @staticmethod
+    def pageLinks(user, template,currentWebsite, string):
+        if Create.arrayExists(string):
+            links = json.loads( string )
+            for link in links:
+                w = Website.objects.get(domain=link,user=user)
+                pl = PageLinks.objects.create(fromSite=currentWebsite,toSite=w)
+                pl.save()
+
     '''
     checks whether or not an array of values exist inside
     of the string
     '''
-def arrayExists(string):
-    variable = ''
-    try:
-        variable = json.loads( string )
-    except ValueError, e:
-        return False
-    if len(variable) == 1 and variable[0] == '':
-        return False 
-    elif len(variable):
-        return True
-    else:
-        return False
+    @staticmethod
+    def arrayExists(string):
+        variable = ''
+        try:
+            variable = json.loads( string )
+        except ValueError, e:
+            return False
+        if len(variable) == 1 and variable[0] == '':
+            return False 
+        elif len(variable):
+            return True
+        else:
+            return False
 
