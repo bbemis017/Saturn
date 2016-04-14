@@ -35,6 +35,59 @@ def varExists(request,string):
     else:
         return False
 
+def createSite_validation(request, response_data):
+    #this method checks the necessary fields for createSite
+    #check essentials
+    if not varExists(request,'domain'):
+        response_data['domain_missing'] = 1
+        response_data['error'] = 1
+    if not varExists(request,'title'):
+        response_data['title_missing'] = 1
+        response_data['error'] = 1
+    return response_data
+
+def submitSite(request, response_data):
+    #this method extracts the necessary info and submit them
+    domain = request.POST.get('domain')
+    title = request.POST.get('title')
+    author = request.POST.get('author')
+    description = request.POST.get('description')
+
+    sections = {} 
+
+    #check if site exists
+    if not Website.objects.filter(domain=domain).exists():
+        template = None
+        # will not work until js is updated
+        if 'courseTemplate' in request.POST: 
+            template = create_course_template(request)
+            print "course"
+        elif 'resumeTemplate' in request.POST:
+            template = create_resume_template(request)
+            print "resume"
+
+        createSections(request,request.user,template)
+
+        #create Site
+        website = Website.objects.create(user=request.user,template=template)
+        website.domain = domain
+        website.template = template
+        website.description = description
+        website.save()
+
+        if 'link_domains' in request.POST:
+            links = request.POST.get('link_domains')
+            Create.pageLinks(request.user,template,website,links)
+
+        response_data = {}
+        response_data['redirect'] = "/accounts/sites";
+        return response_data
+    else:
+        #error
+        errorDomainExists = True
+        response_data['error'] = 1
+        return response_data
+
 @login_required
 def createSite(request):
     #for information displayed on navigation bar
@@ -55,61 +108,12 @@ def createSite(request):
 
             if 'submit' in request.POST:
 
-                
-
-                #check essentials
-                if not varExists(request,'domain'):
-                    response_data['domain_missing'] = 1
-                    response_data['error'] = 1
-                if not varExists(request,'title'):
-                    response_data['title_missing'] = 1
-                    response_data['error'] = 1
+                response_data = createSite_validation(request, response_data)
                 if 'error' in response_data:
                     return JsonResponse(response_data)
 
-                domain = request.POST.get('domain')
-                title = request.POST.get('title')
-                author = request.POST.get('author')
-                description = request.POST.get('description')
-
-                sections = {} 
-
-                #check and assign variables
-
-
-                #check if site exists
-                if not Website.objects.filter(domain=domain).exists():
-
-                    template = None
-                    # will not work until js is updated
-                    if 'courseTemplate' in request.POST: 
-                        template = create_course_template(request)
-                        print "course"
-                    elif 'resumeTemplate' in request.POST:
-                        template = create_resume_template(request)
-                        print "resume"
-
-                    createSections(request,request.user,template)
-
-                    #create Site
-                    website = Website.objects.create(user=request.user,template=template)
-                    website.domain = domain
-                    website.template = template
-                    website.description = description
-                    website.save()
-
-                    if 'link_domains' in request.POST:
-                        links = request.POST.get('link_domains')
-                        Create.pageLinks(request.user,template,website,links)
-
-                    response_data = {}
-                    response_data['redirect'] = "/accounts/sites";
-                    return JsonResponse(response_data);
-                else:
-                    #error
-                    errorDomainExists = True
-                    response_data['error'] = 1
-                    return JsonResponse(response_data);
+                response_data = submitSite(request, response_data);
+                return JsonResponse(response_data)
 
             #if client requests to check domain availability
             if 'domain_check' in request.POST:
@@ -122,7 +126,6 @@ def createSite(request):
         else:
             #if no template selected and not a ajax response
             return HttpResponseRedirect("/sites/selectTemplate?error=1")
-
     return render(request, "website/createSite.html",locals())
 
 def create_course_template(request):
