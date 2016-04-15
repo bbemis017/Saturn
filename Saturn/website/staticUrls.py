@@ -4,4 +4,5 @@ from website import views
 urlpatterns = [
         url(r'^createSite/$',views.createSite),
         url(r'^selectTemplate/$',views.selectTemplate),
+        url(r'^editSite/$',views.editSite),
 ]

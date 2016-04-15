@@ -7,6 +7,7 @@ from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplate
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
 from website.create import Create
+from accounts.constants import ErrorCode
 
 
 import json
@@ -124,6 +125,98 @@ def createSite(request):
             return HttpResponseRedirect("/sites/selectTemplate?error=1")
 
     return render(request, "website/createSite.html",locals())
+
+def editSite(request) :
+    account = Accounts.objects.get(user=request.user)
+
+    if request.method == "POST":
+        print request.POST
+        if 'submit' in request.POST:
+            #check essentials
+            if not varExists(request,'domain'):
+                #response_data['error'] = 1
+                error_code = ErrorCode.DOMAIN_MISSING
+                return JsonResponse({'error_code': error_code})
+            if not varExists(request,'title'):
+                #response_data['error'] = 1
+                error_code = ErrorCode.TITLE_MISSING
+                return JsonResponse({'error_code': error_code})
+            #if 'error' in response_data:
+                #return JsonResponse(response_data)
+
+            #no error occurs
+            #create sections
+            domain = request.POST.get('domain')
+            title = request.POST.get('title')
+            author = request.POST.get('author')
+            description = request.POST.get('description')
+            #determine the type of form to display
+            website = Website.objects.get(user=request.user, domain=domain)
+            #delete sections
+            sections = Section.objects.filter(template=website.template)
+    
+            if sections.exists():
+                sections.delete()
+            if website.template.exists():
+                website.template.delete()
+            pages = PageLinks.objects.filter(fromSite=website)
+            if pages.exists():
+                pages.delete()
+
+
+
+                sections = {} 
+
+                #check and assign variables
+
+
+                #check if site exists
+                if not Website.objects.filter(domain=domain).exists():
+
+                    template = None
+                    # will not work until js is updated
+                    if 'courseTemplate' in request.POST: 
+                        template = create_course_template(request)
+                        print "course"
+                    elif 'resumeTemplate' in request.POST:
+                        template = create_resume_template(request)
+                        print "resume"
+
+                    createSections(request,request.user,template)
+
+                    #create Site
+                    website.domain = domain
+                    website.template = template
+                    website.description = description
+                    website.save()
+
+                    if 'link_domains' in request.POST:
+                        links = request.POST.get('link_domains')
+                        Create.pageLinks(request.user,template,website,links)
+
+                    response_data = {}
+                    response_data['redirect'] = "/accounts/sites";
+                    return JsonResponse(response_data);
+                else:
+                    #error
+                    errorDomainExists = True
+                    response_data['error'] = 1
+                    return JsonResponse(response_data);
+
+            #if client requests to check domain availability
+            if 'domain_check' in request.POST:
+                domain_json = request.POST.get('domain_json')
+                if Website.objects.filter(domain=domain_json).exists():
+                    response_data['exists'] = 1
+                else:
+                    response_data['exists'] = 0
+                return JsonResponse(response_data)
+        else:
+            #if no template selected and not a ajax response
+            return HttpResponseRedirect("/sites/selectTemplate?error=1")
+
+    return render(request, "website/createSite.html",locals())
+        
 
 def create_course_template(request):
 
