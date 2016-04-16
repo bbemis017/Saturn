@@ -13,9 +13,13 @@ var sections = [];
  * @param string- id name to reference
  * @param array- array of textbox elements
  * @param counter- number of textboxes
+ * @param value- optional parameter, value to insert into box
  * @return new value of counter
  */
-function addBox(string,array,counter){
+function addBox(string,array,counter,value){
+  if( value === undefined ){
+    value = "";
+  }
   ++counter;
 
   var div = $("#container_" + string + 1).clone();
@@ -25,7 +29,7 @@ function addBox(string,array,counter){
 
   var textBox = div.find("#" + string + "1");
   textBox.attr('id',id);
-  textBox.val("");
+  textBox.val(value);
 
   array.push( textBox );
 
@@ -84,6 +88,29 @@ function getValues(elementArray){
   }
 
   return JSON.stringify(newArray);
+}
+
+/**
+ * Takes a string and converts it into an array, adds text boxes and
+ * inserts values back into new text boxes
+ * @param string - this is the string that contains an array
+ * @param id - this is the main id that we are targeting
+ * @param elementArray - this is the array that stores the corresponding text boxes
+ * @param counter - this is the counter for the number of boxes that exist
+ */
+function setInitialValues(string,id,elementArray,counter){
+  if ( string === undefined )
+    return counter;
+  var array = JSON.parse( string );
+  for( var i = 0; i < array.length; i++){
+    if( i == 0){
+     $("#" + id + "1").val( array[i] ); 
+    }
+    else
+      counter = addBox(id,elementArray,counter,array[i]);
+  }
+
+  return counter;
 }
 
 /**
@@ -199,8 +226,18 @@ function replaceSpaces(){
 
 /**
  * adds Section
+ * @param - titleValue optional parameter, value for title box
+ * @param - contentValue optional parameter, value for content box
  */
-function addSection(){
+function addSection(titleValue,contentValue){
+  if( titleValue === undefined || !(titleValue instanceof String) )
+    titleValue = ""
+  if( contentValue === undefined || !(contentValue instanceof String) )
+    contentValue = ""
+
+  console.log("title: " + titleValue);
+  console.log("content: " + contentValue);
+
   var containerDiv = $('#container_section1');
   var dId = "dsection" + (numSection + 1);
 
@@ -216,10 +253,10 @@ function addSection(){
   var content = newDiv.find("#sectionContent1");
 
   title.attr("id","sectionTitle"+numSection);
-  title.val("");
+  title.val(titleValue);
 
   content.attr("id","sectionContent"+numSection);
-  content.val("");
+  content.val(contentValue);
 
   var del = createDelete(dId);
   var delDiv = newDiv.find("#sectionDel");
@@ -256,4 +293,16 @@ function getSectionValues(){
     newArray.push( content.val() );
   }
   return JSON.stringify(newArray);
+}
+
+/**
+ * Accepts a string representing an array of data for the sections
+ */
+function setSectionValues(string){
+  if( string === undefined)
+    return;
+  var array = JSON.parse( string );
+  for( var i = 0; i < array.length; i+=2){ //incrementing by 2
+    addSection( array[i] , array[i+1] );
+  }
 }

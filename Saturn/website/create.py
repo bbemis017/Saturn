@@ -12,12 +12,19 @@ import json
 
 class Create(object):
 
+    ABOUT_COURSE = "About"
+    COURSE_SYLLABUS = "Syllabus"
+    INSTRUCTORS = "Instructors"
+    GRADES = "Grades"
+    TAS = "TA"
+    EXAMS = "Exams"
+
 
     @staticmethod
     def aboutSection(user, template, description):
         if description:
             section = Post.objects.create(user=user,template=template)
-            section.title = "About"
+            section.title = Create.ABOUT_COURSE 
             section.content = description
             section.save()
             return section
@@ -31,7 +38,7 @@ class Create(object):
         if title:
             valid = True
             section.title = title
-        if arrayExists(string):
+        if Create.arrayExists(string):
             valid = True
             section.items = string
         if valid:
@@ -46,7 +53,7 @@ class Create(object):
         if string:
             section = Post.objects.create(user=user, template=template)
             section.content = string
-            section.title = "Syllabus"
+            section.title = Create.COURSE_SYLLABUS 
             section.save()
             return section
         else:

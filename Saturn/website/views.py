@@ -7,6 +7,7 @@ from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplate
 from accounts.models import Accounts
 from section.models import Introduction, Summary, Section, Post, Experience
 from website.create import Create
+from website.manage import Manage
 
 
 import json
@@ -89,6 +90,91 @@ def submitSite(request, response_data):
         return response_data
 
 @login_required
+def getSiteData(request):
+    if request.is_ajax():
+        domain = request.POST.get('domain')
+        template = request.POST.get('template')
+        print template
+
+        data = {}
+
+        #invalid domain and user combination then return error
+        website = Website.objects.filter(domain=domain,user=request.user)
+        if not website.exists():
+            data = {'error' : 'INVALID'}
+            return JsonResponse(data)
+        website = website[0]
+
+        data = {'domain': website.domain, 'title' : website.template.title,
+                'description' : website.description }
+
+        data = Manage.getSectionData(website.template,data)
+
+        #TODO: work on getting additional information from templates
+        if template == 'resume':
+            data['template'] = 'resume'
+            data['author'] = website.template.resumetemplate.author
+            data.update( Manage.getIntroData(website.template) )
+            data.update( Manage.getSummaryData(website.template) )
+            data.update( Manage.getExperienceData(website.template) )
+        elif template == 'course':
+            data['template'] = 'course'
+            data['author'] = website.template.coursetemplate.author
+            data.update( Manage.getPostContent(website.template,Create.ABOUT_COURSE) )
+            data.update( Manage.getListSectionData(website.template, Create.INSTRUCTORS) )
+            data.update( Manage.getListSectionData(website.template, Create.GRADES) )
+            data.update( Manage.getListSectionData(website.template, Create.TAS) )
+            data.update( Manage.getListSectionData(website.template, Create.EXAMS) )
+            data.update( Manage.getPostContent(website.template, Create.COURSE_SYLLABUS) )
+            data = Manage.getPageLinks(website,data)
+            print "course"
+            print data
+
+
+        return JsonResponse(data)
+
+
+@login_required
+def editPage(request):
+
+    #if site is not specified redirect to Sites page
+    if 'domain' not in request.GET:
+        return HttpResponseRedirect("/accounts/sites")
+
+    editDomain = request.GET.get('domain')
+
+    #invalid domain and user combination then redirect to sites page
+    editWebsite = Website.objects.filter(domain=editDomain,user=request.user)
+    if not editWebsite.exists():
+        return HttpResponseRedirect("/accounts/sites")
+
+    editWebsite = editWebsite[0]
+    editTemplate = ""
+
+    try:
+        editWebsite.template.resumetemplate
+    except editWebsite.template.DoesNotExist:
+        courseTemplateSelect = True
+        editTemplate = "course"
+        sites = Website.objects.filter(user=request.user)
+    else:
+        resumeTemplateSelect = True
+        editTemplate = "resume"
+
+
+
+    return render(request,"website/createSite.html",locals())
+
+@login_required
+def editSite(request):
+    data = {}
+    if request.is_ajax():
+        #temporary code, just a placeholder until johnny finishes
+        print request
+        data['redirect'] = "/accounts/sites"
+    return JsonResponse(data)
+
+@login_required
 def createSite(request):
     #for information displayed on navigation bar
     account = Accounts.objects.get(user=request.user)
@@ -142,19 +228,19 @@ def create_course_template(request):
 
     instructorList = request.POST.get('instructors')
     if Create.arrayExists(instructorList):
-        instructors = Create.listSection(request.user,template,"Instructors",instructorList)
+        instructors = Create.listSection(request.user,template,Create.INSTRUCTORS,instructorList)
 
     gradeList = request.POST.get('grades')
     if Create.arrayExists(gradeList):
-        grades = Create.listSection(request.user,template,"Grades",gradeList)
+        grades = Create.listSection(request.user,template,Create.GRADES,gradeList)
 
     taList = request.POST.get('tas')
     if Create.arrayExists(taList):
-        tas = Create.listSection(request.user,template,"TA's",taList)
+        tas = Create.listSection(request.user,template,Create.TAS,taList)
 
     examList = request.POST.get('exams')
     if Create.arrayExists(examList):
-        exams = Create.listSection(request.user,template,"Exams",examList)
+        exams = Create.listSection(request.user,template,Create.EXAMS,examList)
 
     syllabus = request.POST.get('syllabus')
     syllabusSection = Create.syllabusSection(request.user,template,syllabus)
@@ -200,6 +286,7 @@ def create_resume_template(request):
         introduction.gpa = request.POST.get('gpa')
         save = True
     if save:
+        introduction.title = "Education"
         introduction.classes += " gray-bg"
         introduction.save()
     else:
@@ -228,8 +315,6 @@ def createSections(request,user,template):
 
     if Create.arrayExists(request.POST.get('sections')):
         sections = json.loads(request.POST.get('sections') )
-        print "sections exist"
-        print sections
     else:
         return False
 
@@ -238,11 +323,9 @@ def createSections(request,user,template):
         if i % 2 == 0:
             section = Post.objects.create(user=user,template=template)
             section.title = sections[i]
-            print "title"
             if i % 4 == 0:
                 section.classes += " gray-bg"
         else:
-            print "content save"
             section.content = sections[i]
             section.save()
 

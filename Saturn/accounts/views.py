@@ -240,7 +240,6 @@ def sites(request):
         if 'createSite' in request.POST:
             return HttpResponseRedirect("/sites/selectTemplate")
         elif 'deleteBtn' in request.POST:
-            print "deleteBtn"
             if deleteForm.is_valid():
                 domain = deleteForm.cleaned_data['domain']
 
@@ -249,16 +248,18 @@ def sites(request):
                     print "error. Website does not exist, this should not "
                     return render(request, "accounts/dashboard.html", locals())
                 else:
-                        #delete the website
+                    #delete the website
                     website = Website.objects.get(domain = domain)
                     website.template.delete()
                     website.delete()
-            # delete the template
-        #    try:
-         #       template = ResumeTemplate.objects.get()
-          #      template.delete()
-          # except ResumeTemplate.objects.DoesNotExist:
-          #      template = None
+        elif 'viewBtn' in request.POST:
+            if 'domain' in request.POST:
+                domain = request.POST.get('domain')
+                return HttpResponseRedirect("/website/" + domain)
+        elif 'editBtn' in request.POST:
+            if 'domain' in request.POST:
+                domain = request.POST.get('domain')
+                return HttpResponseRedirect("/sites/editPage?domain=" + domain)
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())
