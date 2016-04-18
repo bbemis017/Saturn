@@ -1,4 +1,8 @@
+{% load staticfiles %}
 
+<script src="{% static "js/simplemde.min.js" %}"></script>
+<script src="{% static "js/jquery.js" %}"></script>
+<link href="{% static "css/simplemde.min.css" %}" rel="stylesheet">
 
 <br/><br/>
 <h3><b>Summary</b></h3>
@@ -90,4 +94,46 @@
 
 </div>
 
+<script>
+
+var description = new SimpleMDE({
+  autofocus: true,
+  autosave: {
+      enabled: true,
+      uniqueId: "{{ request.user.username }}_description_{{ request.user.account.get_next_website_id }}",
+      delay: 1000,
+  },
+  element: $("#description")[0],
+  spellChecker: false,
+  tabSize: 4,
+  status: ["autosave", "lines", "words", "cursor"], 
+});
+
+var summary = new SimpleMDE({
+  autofocus: true,
+  autosave: {
+      enabled: true,
+      uniqueId: "{{ request.user.username }}_summary_{{ request.user.account.get_next_website_id }}",
+      delay: 1000,
+  },
+  element: $("#summary")[0],
+  spellChecker: false,
+  tabSize: 4,
+  status: ["autosave", "lines", "words", "cursor"], 
+});
+
+var experience = new SimpleMDE({
+  autofocus: true,
+  autosave: {
+      enabled: true,
+      uniqueId: "{{ request.user.username }}_experience_{{ request.user.account.get_next_website_id }}",
+      delay: 1000,
+  },
+  element: $("#experience")[0],
+  spellChecker: false,
+  tabSize: 4,
+  status: ["autosave", "lines", "words", "cursor"], 
+});
+
+</script>
 
