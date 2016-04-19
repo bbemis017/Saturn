@@ -96,19 +96,6 @@
 
 <script>
 
-var description = new SimpleMDE({
-  autofocus: true,
-  autosave: {
-      enabled: true,
-      uniqueId: "{{ request.user.username }}_description_{{ request.user.account.get_next_website_id }}",
-      delay: 1000,
-  },
-  element: $("#description")[0],
-  spellChecker: false,
-  tabSize: 4,
-  status: ["autosave", "lines", "words", "cursor"], 
-});
-
 var summary = new SimpleMDE({
   autofocus: true,
   autosave: {

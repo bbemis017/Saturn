@@ -41,7 +41,7 @@ function submitForm(){
   var data = { resumeTemplate : "1", skills : skillVal, languages : languageVal,
     majors : majorVal, sections : sectionVal, name : $('#name').val(),
     education : $('#education').val(), gpa : $('#gpa').val(),
-    experience : $('#experience').val(), summary : $('#summary').val() };
+    experience : experience.value(), summary : summary.value() };
 
   if( editMode == "")
     submit("/sites/createSite/",data,resumeResponse);
@@ -88,11 +88,11 @@ function addSkill(){
  */
 function fillResume(json){
 
-  $('#summary').val(json.summary);
+  summary.value(json.summary);
   $('#name').val(json.name);
   $('#education').val(json.education);
   $('#gpa').val(json.gpa);
-  $('#experience').val(json.experience);
+  experience.value(json.experience);
 
 
   numMajors = setInitialValues( json.majors, 'major', majors, numMajors);

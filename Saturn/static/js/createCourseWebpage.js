@@ -45,7 +45,7 @@ function submitForm(){
   var link_domains = getValues(links);
 
   //data to send to server, submit 1 signifies that this ajax is a form submission
-  var data = { courseTemplate : "1", grades : gradeVal, exams : examVal, tas : taVal, instructors : instructorVal, sections : sectionVal, aboutCourse : $('#aboutCourse').val(), syllabus : $('#syllabus').val(), link_domains : link_domains };
+  var data = { courseTemplate : "1", grades : gradeVal, exams : examVal, tas : taVal, instructors : instructorVal, sections : sectionVal, aboutCourse : aboutCourse.value(), syllabus : syllabus.value(), link_domains : link_domains };
 
   if( editMode == "")
     submit("/sites/createSite/",data,courseWebPageResponse);
@@ -153,8 +153,8 @@ function fillCourse(json){
   console.log(json);
   console.log(json.About);
 
-  $('#aboutCourse').val( json.About );
-  $('#syllabus').val( json.Syllabus );
+  aboutCourse.value( json.About );
+  syllabus.value( json.Syllabus );
 
   numInstructors = setInitialValues( json.Instructors,'instructor',instructors, numInstructors);
   numTas = setInitialValues( json.TA, 'ta', tas, numTas);
