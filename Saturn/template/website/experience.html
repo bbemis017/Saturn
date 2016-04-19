@@ -1,12 +1,24 @@
 {% load django_markdown django_markdown_static %}
-
-  {{ section.experience.content|markdown }}
-  {% if section.experience.getSkills %}
-    <h3> Skills </h3>
-    <ul>
-    {% for skill in section.experience.getSkills %}
-      <li> {{ skill }} </li>
-    {% endfor %}
-    </ul>
+    <div class="row">
+        <div class="col-lg-1"> </div>
+        <div class="col-lg-5">
+            <h1>Working Experience</h1>
+            <br>
+            <br>
+            {{ section.experience.content|markdown }}
+        </div>
+        <div class="col-lg-5">
+            <h1> Skills </h1>
+            <br>
+            <br>
+            {% if section.experience.getSkills %}
+            <ul>
+                {% for skill in section.experience.getSkills %}
+                <li> {{ skill }} </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-1"> </div>
+    </div>
   {% endif %}
 

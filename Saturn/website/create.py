@@ -1,7 +1,8 @@
 from section.models import(
         Section,
         Post,
-        List
+        List,
+	 About
         )
 from website.models import(
         PageLinks,
@@ -14,15 +15,17 @@ class Create(object):
 
 
     @staticmethod
-    def aboutSection(user, template, description):
+    def aboutSection(user, template, title, description):
         if description:
-            section = Post.objects.create(user=user,template=template)
-            section.title = "About"
+            section = About.objects.create(user=user,template=template)
+            section.title = title;
             section.content = description
             section.save()
             return section
         else:
             return False
+
+            
 
     @staticmethod
     def listSection(user, template, title, string):

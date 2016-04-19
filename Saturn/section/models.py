@@ -167,3 +167,7 @@ class Post(Section):
 
     def __unicode__(self):
         return u'%s' % self.__str__()
+
+class About(Section):
+    content = MarkdownField(blank=True)
+    

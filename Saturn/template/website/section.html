@@ -2,15 +2,17 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col-lg-12">
-                  <h1>{{ section.title }}</h1>
-                  {% if section.post %}
-                    {% include 'website/post.html' %}
+              <!--   <h1>{{ section.title }}</h1>  -->
+                  {% if section.about %}
+                    {% include 'website/resumeAbout.html' %}
                   {% elif section.experience %}
                     {% include 'website/experience.html' %}
                   {% elif section.summary %}
                     {% include 'website/summary.html' %}
                   {% elif section.introduction %}
                     {% include 'website/introduction.html' %}
+		   {% elif section.post %}
+		     {% include 'website/post.html' %}
                   {% endif %}
                 </div>
             </div>

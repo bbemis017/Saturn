@@ -5,7 +5,7 @@ from website.models import Website
 from website.models import Template, ResumeTemplate, CourseTemplate, PageLinks
 from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
-from section.models import Introduction, Summary, Section, Post, Experience
+from section.models import Introduction, Summary, Section, Post, Experience, About
 from website.create import Create
 
 
@@ -135,7 +135,7 @@ def create_course_template(request):
     template.save() 
 
     aboutCourse = request.POST.get('aboutCourse')
-    about = Create.aboutSection(request.user,template,aboutCourse)
+    about = Create.aboutSection(request.user,template,"About",aboutCourse)
 
     instructorList = request.POST.get('instructors')
     if Create.arrayExists(instructorList):
@@ -171,11 +171,11 @@ def create_resume_template(request):
     template.save()
 
 
-    if varExists(request,'summary'):
-        summ = Post.objects.create(user=request.user,template=template)
-        summ.title = "About Me"
-        summ.content = request.POST.get('summary')
-        summ.save()
+
+
+    Create.aboutSection(request.user, template, "About me", request.POST.get('summary'))
+    
+
 
     #introduction
     introduction = Introduction.objects.create(user=request.user,template=template)
