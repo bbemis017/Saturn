@@ -35,7 +35,10 @@ class Accounts(models.Model):
             self.save()
 
     def get_next_website_id(self):
-        return Website.objects.filter(user=self.user).order_by('-id')[0].id + 1
+        obj = Website.objects.filter(user=self.user).order_by('-id')
+        if not obj.exists():
+            return 1
+        return obj[0].id + 1
 
 
 

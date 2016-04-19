@@ -64,9 +64,10 @@ class Create(object):
         if Create.arrayExists(string):
             links = json.loads( string )
             for link in links:
-                w = Website.objects.get(domain=link,user=user)
-                pl = PageLinks.objects.create(fromSite=currentWebsite,toSite=w)
-                pl.save()
+                w = Website.objects.filter(domain=link,user=user)
+                if w.exists():
+                    pl = PageLinks.objects.create(fromSite=currentWebsite,toSite=w[0])
+                    pl.save()
 
     '''
     checks whether or not an array of values exist inside
