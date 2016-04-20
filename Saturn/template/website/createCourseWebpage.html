@@ -129,7 +129,7 @@
 
 
 var aboutCourse = new SimpleMDE({
-  autofocus: true,
+  autofocus: false,
   autosave: {
       enabled: true,
       uniqueId: "{{ request.user.username }}_aboutCourse_{{ request.user.account.get_next_website_id }}",
@@ -142,7 +142,7 @@ var aboutCourse = new SimpleMDE({
 });
 
 var syllabus = new SimpleMDE({
-  autofocus: true,
+  autofocus: false,
   autosave: {
       enabled: true,
       uniqueId: "{{ request.user.username }}_syllabus_{{ request.user.account.get_next_website_id }}",

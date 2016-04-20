@@ -189,12 +189,26 @@ function responseFailure(xhr,errmsg,err){
  */
 function submitResponse(json){
   //TODO: display error messages if necessary
+  console.log(json);
   if( json.redirect){
     window.location.href = json.redirect;
   }
-  else if(json.error){
+  else if(json.error_code){
     $('html,body').animate({ scrollTop: 0},'fast');
     //TODO: display error messages
+    //title missing
+    if( json.error_code == 3){
+      $('#title_missing').show();
+    }
+    else{
+      $('#title_missing').hide();
+    }
+    //domain missing
+    if( json.error_code == 4)
+      $('#domain_missing').show();
+    else
+      $('#domain_missing').hide();
+    /*
     if(json.domain_missing){
       $('#domain_missing').show();
     }
@@ -207,10 +221,11 @@ function submitResponse(json){
     else{
       $('#title_missing').hide();
     }
+    */
     console.log(json);
   }
   else{
-    console.log("undefined submitResponse");
+    console.log("undefined submitResponse this one");
     console.log(json);
   }
 }
@@ -224,17 +239,16 @@ function replaceSpaces(){
   $('#domain').val(domain);
 }
 
+function addSection(){
+  addSectionValues("","");
+}
+
 /**
  * adds Section
  * @param - titleValue optional parameter, value for title box
  * @param - contentValue optional parameter, value for content box
  */
-function addSection(titleValue,contentValue){
-  if( titleValue === undefined || !(titleValue instanceof String) )
-    titleValue = ""
-  if( contentValue === undefined || !(contentValue instanceof String) )
-    contentValue = ""
-
+function addSectionValues(titleValue,contentValue){
   console.log("title: " + titleValue);
   console.log("content: " + contentValue);
 
@@ -303,6 +317,6 @@ function setSectionValues(string){
     return;
   var array = JSON.parse( string );
   for( var i = 0; i < array.length; i+=2){ //incrementing by 2
-    addSection( array[i] , array[i+1] );
+    addSectionValues( array[i] , array[i+1] );
   }
 }

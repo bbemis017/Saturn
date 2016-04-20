@@ -53,6 +53,7 @@ class Manage(object):
     @staticmethod
     def getSectionData(template,data):
         sections = Post.objects.filter(template=template)
+        sections = sections.exclude(title="About Me")
         sections = sections.exclude(title=Create.ABOUT_COURSE)
         sections = sections.exclude(title=Create.COURSE_SYLLABUS)
         sections = sections.exclude(title=Create.INSTRUCTORS)

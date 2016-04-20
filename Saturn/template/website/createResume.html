@@ -97,7 +97,7 @@
 <script>
 
 var summary = new SimpleMDE({
-  autofocus: true,
+  autofocus: false,
   autosave: {
       enabled: true,
       uniqueId: "{{ request.user.username }}_summary_{{ request.user.account.get_next_website_id }}",
@@ -110,7 +110,7 @@ var summary = new SimpleMDE({
 });
 
 var experience = new SimpleMDE({
-  autofocus: true,
+  autofocus: false,
   autosave: {
       enabled: true,
       uniqueId: "{{ request.user.username }}_experience_{{ request.user.account.get_next_website_id }}",
