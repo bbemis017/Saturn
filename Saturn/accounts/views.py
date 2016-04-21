@@ -7,6 +7,7 @@ from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth import logout as django_logout
 from ratelimit.decorators import ratelimit
 from django.forms.utils import ErrorList
+from django.conf import settings
 from accounts.models import Accounts
 from section.models import File
 from website.models import Website
@@ -19,6 +20,8 @@ from accounts.forms import (
 )
 from website.forms import DeleteSiteForm
 from utils.email import EmailService
+
+import os
 
 
 @ratelimit(key='get:email', rate='5/m', block=True)
@@ -289,7 +292,7 @@ def upload_file(request):
         #
         ########################################################
         valid_preview_extentions = ['jpg', 'jpeg', 'png', 'gif']
-        if file.content.name.split('.')[-1] in valid_preview_extentions:
+        if file.content.name.split('.')[-1].lower() in valid_preview_extentions:
             file.preview = True
         file.title = ''.join(file.content.name.split('.')[:-1])
         file.save()
@@ -306,8 +309,14 @@ def delete_file(request, file_id):
         return JsonResponse({'success': False, "code": ErrorCode.NO_SUCH_FILE})
     file = file[0]
     if request.user.id != file.user.id:
-        return JsonResponse({'success': False, "code": ErrorCode.NO_PERMISSION})
-    file.delete()
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+
+    try:
+        os.remove(os.path.join(settings.MEDIA_ROOT, file.content.name))
+        file.delete()
+    except:
+        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+
     return JsonResponse({'success': True, "file_id": file_id})
 
 ########################################################
