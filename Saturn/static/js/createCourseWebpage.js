@@ -45,15 +45,18 @@ function submitForm(){
   var link_domains = getValues(links);
 
   //data to send to server, submit 1 signifies that this ajax is a form submission
-  var data = { courseTemplate : "1", grades : gradeVal, exams : examVal, tas : taVal, instructors : instructorVal, sections : sectionVal, aboutCourse : $('#aboutCourse').val(), syllabus : $('#syllabus').val(), link_domains : link_domains };
+  var data = { courseTemplate : "1", grades : gradeVal, exams : examVal, tas : taVal, instructors : instructorVal, sections : sectionVal, aboutCourse : aboutCourse.value(), syllabus : syllabus.value(), link_domains : link_domains };
 
-  submit("/sites/createSite/",data,courseWebpageResponse);
+  if( editMode == "")
+    submit("/sites/createSite/",data,courseWebPageResponse);
+  else
+    submit("/sites/editSite/",data,courseWebPageResponse);
 }
 
 /**
  * recieves response from from server after form submission
  */
-function courseWebpageResponse(json){
+function courseWebPageResponse(json){
   //respond to errors specific to creating a resume
 
   //always calls submitResponse from createSite.js
@@ -65,7 +68,9 @@ function courseWebpageResponse(json){
 /**
  * Adds select for link
  */
-function addLink(){
+function addLink(value){
+  if( value === undefined)
+    value = "";
   var string = "link"
 
   ++numLinks;
@@ -77,7 +82,7 @@ function addLink(){
 
   var select = div.find("#" + string + "1");
   select.attr('id',id);
-  select.val("");
+  select.val(value);
 
   links.push( select );
 
@@ -98,6 +103,19 @@ function addLink(){
     $("#" + this.id).remove();
   });
 
+}
+
+function setInitialLinks(string){
+  if( string === undefined)
+    return counter;
+  var array = JSON.parse( string );
+  for( var i = 0; i < array.length; i++){
+    if( i == 0){
+      $("#link1").val( array[i] );
+    }
+    else
+      addLink( array[i] );
+  }
 }
 
 /**
@@ -126,4 +144,27 @@ function addExam(){
  */
 function addGrade(){
   numGrades = addBox("grade",grades,numGrades);
+}
+
+/**
+ * Fills in information from values stored in the json file
+ */
+function fillCourse(json){
+  console.log(json);
+  console.log(json.About);
+
+  aboutCourse.value( json.About );
+  syllabus.value( json.Syllabus );
+
+  numInstructors = setInitialValues( json.Instructors,'instructor',instructors, numInstructors);
+  numTas = setInitialValues( json.TA, 'ta', tas, numTas);
+  numExams = setInitialValues( json.Exams, 'exam', exams, numExams);
+  numGrades = setInitialValues( json.Grades, 'grade', grades, numGrades);
+
+  //numLinks = setInitialValues( json.links, 'link', links,numLinks);
+  setInitialLinks(json.links);
+
+  setSectionValues();
+
+
 }

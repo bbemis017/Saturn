@@ -13,6 +13,13 @@ import json
 
 class Create(object):
 
+    ABOUT_COURSE = "About"
+    COURSE_SYLLABUS = "Syllabus"
+    INSTRUCTORS = "Instructors"
+    GRADES = "Grades"
+    TAS = "TA"
+    EXAMS = "Exams"
+
 
     @staticmethod
     def aboutSection(user, template, title, description):
@@ -34,7 +41,7 @@ class Create(object):
         if title:
             valid = True
             section.title = title
-        if arrayExists(string):
+        if Create.arrayExists(string):
             valid = True
             section.items = string
         if valid:
@@ -49,7 +56,7 @@ class Create(object):
         if string:
             section = Post.objects.create(user=user, template=template)
             section.content = string
-            section.title = "Syllabus"
+            section.title = Create.COURSE_SYLLABUS 
             section.save()
             return section
         else:
@@ -60,9 +67,10 @@ class Create(object):
         if Create.arrayExists(string):
             links = json.loads( string )
             for link in links:
-                w = Website.objects.get(domain=link,user=user)
-                pl = PageLinks.objects.create(fromSite=currentWebsite,toSite=w)
-                pl.save()
+                w = Website.objects.filter(domain=link,user=user)
+                if w.exists():
+                    pl = PageLinks.objects.create(fromSite=currentWebsite,toSite=w[0])
+                    pl.save()
 
     '''
     checks whether or not an array of values exist inside

@@ -41,9 +41,12 @@ function submitForm(){
   var data = { resumeTemplate : "1", skills : skillVal, languages : languageVal,
     majors : majorVal, sections : sectionVal, name : $('#name').val(),
     education : $('#education').val(), gpa : $('#gpa').val(),
-    experience : $('#experience').val(), summary : $('#summary').val() };
+    experience : experience.value(), summary : summary.value() };
 
-  submit("/sites/createSite/",data,resumeResponse);
+  if( editMode == "")
+    submit("/sites/createSite/",data,resumeResponse);
+  else
+    submit("/sites/editSite/",data,resumeResponse);
 }
 
 /**
@@ -77,6 +80,24 @@ function addLanguage(){
  */
 function addSkill(){
   numSkills = addBox("skill",skills,numSkills);
+}
+
+/**
+ * Fills in the resume with information when user decides to edit
+ * existing resume
+ */
+function fillResume(json){
+
+  summary.value(json.summary);
+  $('#name').val(json.name);
+  $('#education').val(json.education);
+  $('#gpa').val(json.gpa);
+  experience.value(json.experience);
+
+
+  numMajors = setInitialValues( json.majors, 'major', majors, numMajors);
+  numLangauges = setInitialValues( json.languages, 'language', languages, numLanguages);
+  numSkills = setInitialValues( json.skills, 'skill', skills, numSkills);
 }
 
 

@@ -141,6 +141,9 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
 
+    <script>
+      var editMode = '{{ editTemplate }}';
+    </script>
     <!-- custom javascript -->
     <script src="{% static "js/createSite.js" %}"></script>
     {% if resumeTemplateSelect %}
@@ -148,6 +151,14 @@
     {% endif %}
     {% if courseTemplateSelect %}
       <script src="{% static "js/createCourseWebpage.js" %}"></script>
+    {% endif %}
+
+    {% if editDomain %}
+      <script>
+        var domain = "{{ editDomain }}";
+      </script>
+
+      <script src = {% static "js/editSite.js" %} ></script>
     {% endif %}
 
   </body>

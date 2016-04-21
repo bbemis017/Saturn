@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from website.models import Website
 from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import timedelta
@@ -32,5 +33,13 @@ class Accounts(models.Model):
         self.expire_at = timezone.now() + timedelta(hours=24)
         if commit:
             self.save()
+
+    def get_next_website_id(self):
+        obj = Website.objects.filter(user=self.user).order_by('-id')
+        if not obj.exists():
+            return 1
+        return obj[0].id + 1
+
+
 
 User.account = property(lambda u: Accounts.objects.get_or_create(user=u)[0])

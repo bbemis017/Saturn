@@ -10,7 +10,7 @@ from django.forms.utils import ErrorList
 from accounts.models import Accounts
 from section.models import File
 from website.models import Website
-from accounts.constants import ERRORCODE
+from accounts.constants import ErrorCode
 from accounts.forms import (
     SignupForm,
     SigninForm,
@@ -240,7 +240,6 @@ def sites(request):
         if 'createSite' in request.POST:
             return HttpResponseRedirect("/sites/selectTemplate")
         elif 'deleteBtn' in request.POST:
-            print "deleteBtn"
             if deleteForm.is_valid():
                 domain = deleteForm.cleaned_data['domain']
 
@@ -249,16 +248,18 @@ def sites(request):
                     print "error. Website does not exist, this should not "
                     return render(request, "accounts/dashboard.html", locals())
                 else:
-                        #delete the website
+                    #delete the website
                     website = Website.objects.get(domain = domain)
                     website.template.delete()
                     website.delete()
-            # delete the template
-        #    try:
-         #       template = ResumeTemplate.objects.get()
-          #      template.delete()
-          # except ResumeTemplate.objects.DoesNotExist:
-          #      template = None
+        elif 'viewBtn' in request.POST:
+            if 'domain' in request.POST:
+                domain = request.POST.get('domain')
+                return HttpResponseRedirect("/website/" + domain)
+        elif 'editBtn' in request.POST:
+            if 'domain' in request.POST:
+                domain = request.POST.get('domain')
+                return HttpResponseRedirect("/sites/editPage?domain=" + domain)
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())
@@ -302,10 +303,10 @@ def upload_file(request):
 def delete_file(request, file_id):
     file = File.objects.filter(id=file_id)
     if len(file) == 0:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_SUCH_FILE})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_SUCH_FILE})
     file = file[0]
     if request.user.id != file.user.id:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_PERMISSION})
     file.delete()
     return JsonResponse({'success': True, "file_id": file_id})
 
@@ -319,10 +320,10 @@ def delete_file(request, file_id):
 def edit_file(request, file_id):
     file = File.objects.filter(id=file_id)
     if len(file) == 0:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_SUCH_FILE})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_SUCH_FILE})
     file = file[0]
     if request.user.id != file.user.id:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_PERMISSION})
     file.status = int(request.POST['action'])
     file.save()
     return JsonResponse({'success': True, "file_id": file_id, 'file_status': file.status})
