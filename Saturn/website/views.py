@@ -9,6 +9,7 @@ from section.models import Introduction, Summary, Section, Post, Experience, Abo
 from website.create import Create
 from website.manage import Manage
 from accounts.constants import ErrorCode
+from django.utils.encoding import smart_str
 
 
 import json
@@ -30,6 +31,27 @@ def displaySite(request,domain):
     sections = Section.objects.filter(template=template, user=website.user)
 
     return render(request,template.path,locals())
+
+@login_required
+def downloadSite(request,domain):
+
+    website = Website.objects.get(domain=domain)
+    template = website.template
+
+    sections = Section.objects.filter(template=template, user=website.user)
+
+    '''
+    if template.path != "website/resumeTemplate.html":
+        template.path = "website/courseTemplateDownload.html" 
+    else:
+        template.path = "website/resumeTemplateDownload.html" 
+    '''
+    download = True
+    response = render(request, template.path, locals())
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(template.path)
+    response['X-Sendfile'] = smart_str(template.path)
+
+    return response
 
 def varExists(request,string):
     if string in request.POST and request.POST.get(string) != '':
