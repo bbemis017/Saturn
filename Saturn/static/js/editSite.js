@@ -40,14 +40,6 @@ function getData(json){
  * Fills in the form with information from the json file
  */
 function fillForm(json){
-  
-  //puts basic information into form
-  $('#domain').val(json.domain);
-  $('#title').val(json.title);
-  $('#author').val(json.author);
-  $('#description').val(json.description);
-
-  setSectionValues( json.sections );
 
   console.log(json);
   if(json.template == 'resume'){
@@ -56,4 +48,12 @@ function fillForm(json){
   else if(json.template == 'course'){
     fillCourse(json);
   }
+ //puts basic information into form
+  $('#domain').val(json.domain);
+  $('#title').val(json.title);
+  $('#author').val(json.author);
+  $('#description').val(json.description);
+
+  setSectionValues( json.sections );
+
 }

@@ -7,6 +7,10 @@ var csrf_token = $.cookie('csrftoken');
 var domainApproved = false;
 var numSection = 1;
 var sections = [];
+var sectionEditors = [];
+
+var editorsDefined = false;
+
 
 /**
  * Adds additional text box and corresponding delete button
@@ -100,6 +104,8 @@ function getValues(elementArray){
  */
 function setInitialValues(string,id,elementArray,counter){
   if ( string === undefined )
+    return counter;
+  if ( string == "")
     return counter;
   var array = JSON.parse( string );
   for( var i = 0; i < array.length; i++){
@@ -270,7 +276,7 @@ function addSectionValues(titleValue,contentValue){
   title.val(titleValue);
 
   content.attr("id","sectionContent"+numSection);
-  content.val(contentValue);
+  //content.val(contentValue);
 
   var del = createDelete(dId);
   var delDiv = newDiv.find("#sectionDel");
@@ -278,14 +284,24 @@ function addSectionValues(titleValue,contentValue){
 
   newDiv.show();
 
+
   $("#section").append(newDiv);
   newDiv = $("#container_section" + (numSection) );
   sections.push( newDiv );
 
+  editor = createEditor('#sectionContent'+numSection);
+  editor.value(contentValue);
+  sectionEditors.push( editor );
+
   $("#" + dId).click(function(){
     var d = this.id.substr(1,this.id.length);
+
     var index = sections.indexOf( newDiv );
     sections.splice(index,1);
+
+    var index2 = sectionEditors.indexOf( editor );
+    sectionEditors.splice(index2,1);
+
     $("#container_" + d).remove();
     $("#" + d).remove();
     $("#" + this.id).remove();
@@ -304,7 +320,8 @@ function getSectionValues(){
     var title = sections[i].find("[name='title']");
     var content = sections[i].find("[name='content']");
     newArray.push( title.val() );
-    newArray.push( content.val() );
+    //newArray.push( content.val() );
+    newArray.push( sectionEditors[i].value() );
   }
   return JSON.stringify(newArray);
 }
@@ -320,3 +337,4 @@ function setSectionValues(string){
     addSectionValues( array[i] , array[i+1] );
   }
 }
+

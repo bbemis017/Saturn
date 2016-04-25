@@ -170,5 +170,5 @@ class Post(Section):
 
 class About(Section):
     content = MarkdownField(blank=True)
-    
+    image = models.ForeignKey(File,null=True)
     
