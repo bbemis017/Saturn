@@ -1,6 +1,7 @@
 $('#addMajor').click(addMajor);
 $('#addLanguage').click(addLanguage);
 $('#addSkill').click(addSkill);
+$('#openSelectImage').click(openSelectImage);
 
 
 $('#submit').click(submitForm);
@@ -16,11 +17,41 @@ var majors = [];
 var languages = [];
 var skills = [];
 
+//markdown editors
+var summary;
+var experience;
+
+//image content added by button
+var summaryImage;
+
 
 //add first element of each to the array
 majors.push( $('#major1') );
 languages.push( $('#language1') );
 skills.push( $('#skill1') );
+
+if(!editorsDefined){
+  summary = createEditor('#summary');
+  experience = createEditor('#experience');
+  editorsDefined = true;
+}
+
+/**
+ * Opens modal to Add Image to Summary Section
+ */
+function openSelectImage(){
+  $('#selectImage').modal('show');
+}
+
+/**
+ * Stores Image url in summaryImage to be sent
+ * through ajax later
+ */
+function addImage(filecontent){
+  summaryImage = filecontent;
+  $('#selectImage').modal('hide');
+  $('#displayImage').attr('src','/static/uploads/' + filecontent);
+}
 
 /**
  * Submit button is clicked
@@ -41,7 +72,7 @@ function submitForm(){
   var data = { resumeTemplate : "1", skills : skillVal, languages : languageVal,
     majors : majorVal, sections : sectionVal, name : $('#name').val(),
     education : $('#education').val(), gpa : $('#gpa').val(),
-    experience : experience.value(), summary : summary.value() };
+    experience : experience.value(), summary : summary.value(), summaryImage : summaryImage };
 
   if( editMode == "")
     submit("/sites/createSite/",data,resumeResponse);
@@ -88,11 +119,22 @@ function addSkill(){
  */
 function fillResume(json){
 
+  if (!editorsDefined){
+    summary = createEditor('#summary');
+    experience = createEditor('#experience');
+    editorsDefined = true;
+  }
+
   summary.value(json.summary);
   $('#name').val(json.name);
   $('#education').val(json.education);
   $('#gpa').val(json.gpa);
   experience.value(json.experience);
+
+  if( json.summaryImage != undefined){
+    addImage( json.summaryImage);
+  }
+  console.log(json.summaryImage);
 
 
   numMajors = setInitialValues( json.majors, 'major', majors, numMajors);

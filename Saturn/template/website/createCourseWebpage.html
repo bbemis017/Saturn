@@ -124,35 +124,3 @@
   <label class="control-label">Write you syllabus here!</label><br/>
   <textarea id="syllabus" name="syllabus" class="form-control" rows="6"></textarea>
 </div>
-
-<script>
-
-
-var aboutCourse = new SimpleMDE({
-  autofocus: false,
-  autosave: {
-      enabled: true,
-      uniqueId: "{{ request.user.username }}_aboutCourse_{{ request.user.account.get_next_website_id }}",
-      delay: 1000,
-  },
-  element: $("#aboutCourse")[0],
-  spellChecker: false,
-  tabSize: 4,
-  status: ["autosave", "lines", "words", "cursor"], 
-});
-
-var syllabus = new SimpleMDE({
-  autofocus: false,
-  autosave: {
-      enabled: true,
-      uniqueId: "{{ request.user.username }}_syllabus_{{ request.user.account.get_next_website_id }}",
-      delay: 1000,
-  },
-  element: $("#syllabus")[0],
-  spellChecker: false,
-  tabSize: 4,
-  status: ["autosave", "lines", "words", "cursor"], 
-});
-
-</script>
-

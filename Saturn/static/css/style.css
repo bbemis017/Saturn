@@ -24,3 +24,17 @@
     height: 100px;
     width: 100px;
 }
+.wrap {
+  word-break: break-all;
+}
+.responsiveImage {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.responsiveImage:hover {
+  opacity: 1.0;
+  filter: alpha(opacity=100);
+}
+span.glyphicon-file {
+  font-size: 6.5em;
+}

@@ -27,6 +27,16 @@ exams.push( $('#exam1') );
 grades.push( $('#grade1') );
 links.push( $('#link1') );
 
+//markdown editors
+var aboutCourse;
+var syllabus;
+
+if(!editorsDefined){
+  syllabus = createEditor('#syllabus');
+  aboutCourse = createEditor('#aboutCourse');
+  editorsDefined = true;
+}
+
 /**
  * Submit button is clicked
  */
@@ -108,6 +118,8 @@ function addLink(value){
 function setInitialLinks(string){
   if( string === undefined)
     return counter;
+  if( string == "")
+    return counter;
   var array = JSON.parse( string );
   for( var i = 0; i < array.length; i++){
     if( i == 0){
@@ -153,8 +165,15 @@ function fillCourse(json){
   console.log(json);
   console.log(json.About);
 
+  if(!editorsDefined){
+    aboutCourse = createEditor('#aboutCourse');
+    syllabus = createEditor('#syllabus');
+    editorsDefined = true;
+  }
+
   aboutCourse.value( json.About );
   syllabus.value( json.Syllabus );
+
 
   numInstructors = setInitialValues( json.Instructors,'instructor',instructors, numInstructors);
   numTas = setInitialValues( json.TA, 'ta', tas, numTas);

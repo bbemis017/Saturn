@@ -2,7 +2,8 @@ from section.models import(
         Section,
         Post,
         List,
-	 About
+	 About,
+         File
         )
 from website.models import(
         PageLinks,
@@ -22,16 +23,23 @@ class Create(object):
 
 
     @staticmethod
-    def aboutSection(user, template, title, description):
+    def aboutSection(user, template, title, description,image=None):
+        valid = False
+        section = About.objects.create(user=user,template=template)
         if description:
-            section = About.objects.create(user=user,template=template)
-            section.title = title;
+            valid = True
+            section.title = title
             section.content = description
+        if image:
+            image_file  = File.objects.filter(content=image)
+            if image_file.exists():
+                valid = True
+                section.image = image_file[0]
+        if valid:
             section.save()
-            return section
+            print "image saved"
         else:
-            return False
-
+            section.delete()
             
 
     @staticmethod

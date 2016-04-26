@@ -7,4 +7,6 @@ urlpatterns = [
         url(r'^editPage/$',views.editPage),
         url(r'^editSite/$',views.editSite),
         url(r'^getSiteData/$',views.getSiteData),
+        url(r'^download_site\/(?P<domain>[-\w]+)',views.downloadSite),
+
 ]

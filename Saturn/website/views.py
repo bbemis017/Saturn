@@ -5,10 +5,11 @@ from website.models import Website
 from website.models import Template, ResumeTemplate, CourseTemplate, PageLinks
 from website.forms import CreateSiteForm,CreateTemplateForm,CreateResumeTemplateForm, CreateCourseTemplateForm, DeleteSiteForm
 from accounts.models import Accounts
-from section.models import Introduction, Summary, Section, Post, Experience, About
+from section.models import Introduction, Summary, Section, Post, Experience, About, File
 from website.create import Create
 from website.manage import Manage
 from accounts.constants import ErrorCode
+from django.utils.encoding import smart_str
 
 
 import json
@@ -30,6 +31,27 @@ def displaySite(request,domain):
     sections = Section.objects.filter(template=template, user=website.user)
 
     return render(request,template.path,locals())
+
+@login_required
+def downloadSite(request,domain):
+
+    website = Website.objects.get(domain=domain)
+    template = website.template
+
+    sections = Section.objects.filter(template=template, user=website.user)
+
+    '''
+    if template.path != "website/resumeTemplate.html":
+        template.path = "website/courseTemplateDownload.html" 
+    else:
+        template.path = "website/resumeTemplateDownload.html" 
+    '''
+    download = True
+    response = render(request, template.path, locals())
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(template.path)
+    response['X-Sendfile'] = smart_str(template.path)
+
+    return response
 
 def varExists(request,string):
     if string in request.POST and request.POST.get(string) != '':
@@ -118,10 +140,11 @@ def getSiteData(request):
             data.update( Manage.getIntroData(website.template) )
             data.update( Manage.getSummaryData(website.template) )
             data.update( Manage.getExperienceData(website.template) )
+            print data
         elif template == 'course':
             data['template'] = 'course'
             data['author'] = website.template.coursetemplate.author
-            data.update( Manage.getPostContent(website.template,Create.ABOUT_COURSE) )
+            data.update( Manage.getAboutData(website.template) )
             data.update( Manage.getListSectionData(website.template, Create.INSTRUCTORS) )
             data.update( Manage.getListSectionData(website.template, Create.GRADES) )
             data.update( Manage.getListSectionData(website.template, Create.TAS) )
@@ -137,6 +160,7 @@ def getSiteData(request):
 
 @login_required
 def editPage(request):
+    files = File.objects.filter(user=request.user)
 
     #if site is not specified redirect to Sites page
     if 'domain' not in request.GET:
@@ -170,6 +194,7 @@ def editPage(request):
 def createSite(request):
     #for information displayed on navigation bar
     account = Accounts.objects.get(user=request.user)
+    files = File.objects.filter(user=request.user)
 
     if request.method == "POST":
         print request.POST
@@ -323,7 +348,7 @@ def create_resume_template(request):
 
 
 
-    Create.aboutSection(request.user, template, "About me", request.POST.get('summary'))
+    Create.aboutSection(request.user, template, "About Me", request.POST.get('summary'), request.POST.get('summaryImage'))
     
 
 

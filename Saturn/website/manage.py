@@ -3,7 +3,8 @@ from section.models import(
         Introduction,
         Experience,
         Post,
-        List
+        List,
+        About
         )
 from website.models import PageLinks
 from website.create import Create
@@ -28,14 +29,22 @@ class Manage(object):
 
     @staticmethod
     def getSummaryData(template):
-        summaries = Post.objects.filter(template=template)
+        summaries = About.objects.filter(template=template)
         data = {}
 
-        for summary in summaries:
-            if summary.title == "About Me":
-                #we have found summary for this template
-                data['summary'] = summary.content
-                return data
+        if summaries.exists():
+            data['summary'] = summaries[0].content
+            if summaries[0].image != None:
+                data['summaryImage'] = summaries[0].image.content.name
+
+        return data
+    @staticmethod
+    def getAboutData(template):
+        sections = About.objects.filter(template=template)
+        data = {}
+
+        if sections.exists():
+            data['About'] = sections[0].content
         return data
 
     @staticmethod

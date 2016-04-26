@@ -13,12 +13,18 @@
 
     <title>{{ template.title }}</title>
 
+    {% if not download %}
     <!-- Bootstrap Core CSS -->
     <link href="{% static "bootstrap-3.3.6/css/bootstrap.min.css" %}" rel="stylesheet">
 
     <!-- Custom CSS -->
 
     <link href="{% static "css/shop-item.css" %}" rel="stylesheet">
+    {% else %}
+    <!-- Bootstrap Core CSS -->
+    <link href="http://52.71.144.214/static/bootstrap-3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://52.71.144.214/static/css/shop-item.css" rel="stylesheet">
+    {% endif %}
 
   </head>
 
@@ -62,16 +68,19 @@
     </div>
     <!-- /.container -->
 
-
+    {% if not download %}
     <!-- jQuery -->
     <script src="{% static "js/jquery.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "bootstrap-3.3.6/js/bootstrap.min.js" %}"></script>
-
-    <!-- Scrolling Nav JavaScript -->
-    <script src="{% static "js/jquery.easing.min.js" %}"></script>
-    <script src="{% static "js/scrolling-nav.js" %}"></script>
+ 
+    {% else %}
+    <!-- jQuery -->
+    <script src="http://52.71.144.214/static/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://52.71.144.214/static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    {% endif %}
 
   </body>
 

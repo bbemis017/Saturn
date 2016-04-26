@@ -1,12 +1,55 @@
 {% load staticfiles %}
 
-<script src="{% static "js/simplemde.min.js" %}"></script>
-<script src="{% static "js/jquery.js" %}"></script>
-<link href="{% static "css/simplemde.min.css" %}" rel="stylesheet">
+<div id="selectImage" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content" role="document">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Select Image</h4>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="row">
+          {% for file in files %}
+          {% if file.preview %}
+          <div class="col-md-3 wrap responsiveImage">
+            <img class="img-responsive" data-src="holder.js/200x200" src="/static/uploads/{{ file.content.name }}" data-holder-rendered="true" onclick="addImage('{{ file.content }}')"/> 
+            <p> {{ file.get_filename }}</p>
+          </div>
+          {% endif %}
+
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <br/><br/>
-<h3><b>Summary</b></h3>
+<h3><b>Select an Image</b></h3>
 <div class="form-group">
+  <div class="row">
+  <div class="col-md-6">
+    <label class="control-label">Image to be displayed next to your Summary</label>
+    <br/>
+    <button id="openSelectImage" type="button" class="btn btn-success btn-sm">Add Image</button>
+  </div>
+  <div class="col-md-6">
+    <img id="displayImage" class="img-responsive"/>
+  </div>
+  </div>
+</div>
+
+
+<br/><br/>
+<div class="form-group">
+  <h3><b>Summary</b></h3>
   <label class="control-label">Write a brief summary about yourself</label><br/>
   <textarea id="summary" class="form-control" rows="4"></textarea>
 </div>
@@ -93,34 +136,4 @@
   </div>
 
 </div>
-
-<script>
-
-var summary = new SimpleMDE({
-  autofocus: false,
-  autosave: {
-      enabled: true,
-      uniqueId: "{{ request.user.username }}_summary_{{ request.user.account.get_next_website_id }}",
-      delay: 1000,
-  },
-  element: $("#summary")[0],
-  spellChecker: false,
-  tabSize: 4,
-  status: ["autosave", "lines", "words", "cursor"], 
-});
-
-var experience = new SimpleMDE({
-  autofocus: false,
-  autosave: {
-      enabled: true,
-      uniqueId: "{{ request.user.username }}_experience_{{ request.user.account.get_next_website_id }}",
-      delay: 1000,
-  },
-  element: $("#experience")[0],
-  spellChecker: false,
-  tabSize: 4,
-  status: ["autosave", "lines", "words", "cursor"], 
-});
-
-</script>
 

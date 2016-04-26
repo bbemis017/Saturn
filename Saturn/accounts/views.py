@@ -144,7 +144,6 @@ def signin(request):
         next = '/accounts/profile/'
     return HttpResponseRedirect(next)
 
-
 @ratelimit(key='post:email', rate='10/m', block=True, method=['POST'])
 def reset_password(request):
     if 'email' not in request.GET and 'email' not in request.POST:
@@ -263,6 +262,12 @@ def sites(request):
             if 'domain' in request.POST:
                 domain = request.POST.get('domain')
                 return HttpResponseRedirect("/sites/editPage?domain=" + domain)
+        elif 'downloadBtn' in request.POST:
+            print "Downloading page"
+            if 'domain' in request.POST:
+                domain = request.POST.get('domain')
+                return HttpResponseRedirect( "/sites/download_site/" + domain)
+                #return HttpResponseRedirect( "/sites/")
 
     #otherwise render site page
     return render(request, "accounts/sites.html", locals())
