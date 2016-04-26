@@ -314,14 +314,14 @@ def delete_file(request, file_id):
         return JsonResponse({'success': False, "code": ErrorCode.NO_SUCH_FILE})
     file = file[0]
     if request.user.id != file.user.id:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_PERMISSION})
 
     try:
         name = file.content.name
         file.delete()
         os.remove(os.path.join(settings.MEDIA_ROOT, name))
     except:
-        return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
+        return JsonResponse({'success': False, "code": ErrorCode.NO_PERMISSION})
 
     return JsonResponse({'success': True, "file_id": file_id})
 
