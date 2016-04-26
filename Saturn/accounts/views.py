@@ -312,8 +312,9 @@ def delete_file(request, file_id):
         return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
 
     try:
-        os.remove(os.path.join(settings.MEDIA_ROOT, file.content.name))
+        name = file.content.name
         file.delete()
+        os.remove(os.path.join(settings.MEDIA_ROOT, name))
     except:
         return JsonResponse({'success': False, "code": ERRORCODE.NO_PERMISSION})
 
