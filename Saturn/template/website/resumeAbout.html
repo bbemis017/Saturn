@@ -8,9 +8,17 @@
 		 </div>
 		 <div class="col-lg-4">
 	   {% if not section.about.image.content %}
+             {% if not download %}
                <img src="{% static "images/default_pic.png" %}" class="default"/>
+             {% else %}
+               <img src="http://52.71.144.214/static/images/default_pic.png" class="default"/>
+             {% endif %}
 	   {% else %}
+             {% if not download %}
 		<img src="/static/uploads/{{ section.about.image.content }}" class="profile_pic"/>
+             {% else %}
+               <img src="http://52.71.144.214/static/uploads/{{ section.about.image.content }}" class="profile_pic"/>
+             {% endif %}
 	   {% endif %}
 		 </div>
                 <div class="col-lg-6">
