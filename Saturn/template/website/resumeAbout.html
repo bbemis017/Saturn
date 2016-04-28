@@ -7,7 +7,11 @@
 		 <div class="col-lg-1">
 		 </div>
 		 <div class="col-lg-4">
-           <img src="/static/uploads/{{ section.about.image.content }}" />
+	   {% if not section.about.image.content %}
+               <img src="{% static "images/default_pic.png" %}" class="default"/>
+	   {% else %}
+		<img src="/static/uploads/{{ section.about.image.content }}" class="profile_pic"/>
+	   {% endif %}
 		 </div>
                 <div class="col-lg-6">
 		     <h1 style="font-size: 40px">{{ section.title }}</h1>
