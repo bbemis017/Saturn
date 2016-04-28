@@ -9,7 +9,9 @@
           {% include 'website/post.html' %}
         {% elif section.list %}
           {% include 'website/list.html' %}
-        {% endif %}
+        {% elif section.about %}
+          {% include 'website/course_about.html' %}
+        {% endif%}
       </div>
     </div>
   </div>
