@@ -2,7 +2,7 @@
 
 Saturn is a lightweight web page generator designed for people who would like to build their own modern look and decent web page.
 
-TODO: add summary, description, documentations.
+TODO: add summary, description, documentation.
 
 
 
@@ -17,13 +17,6 @@ In order to ssh into the server you will need the key file which will be sent to
     ssh -i saturnkey.pem ubuntu@52.71.144.214
 
 Keep in mind that there is only one account to ssh in with, so you should avoid staying logged in very long. I have installed apache2, mysql, php, git, and phpmyadmin to this server instance. If we need to install anything else to the server instance we just need to keep in mind that the server is running Ubuntu 14.04.
-
-### PhPMyAdmin
-accessible at: http://52.71.144.214/phpmyadmin
-
-username: root
-
-password: saturn
 
 ### Web files
 
