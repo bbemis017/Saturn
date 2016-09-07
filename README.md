@@ -1,6 +1,6 @@
 # Saturn
 
-Saturn is a lightweight web page generator designed for people who would like to build their own modern look and decent web page.
+Saturn is a lightweight web page generator designed for people who would like to build their own web page.
 
 TODO: add summary, description, documentation.
 
